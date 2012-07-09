@@ -50,7 +50,8 @@ namespace SkyLinesTracking {
         client.Close();
       else if (!client.IsDefined())
         // TODO: fix hard-coded IP address:
-        client.Open("78.47.50.46");
+        //client.Open("78.47.50.46");
+        client.Open("192.168.1.152");
     }
 
     void SendFix(const NMEAInfo &basic);
