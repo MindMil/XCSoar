@@ -59,6 +59,11 @@ class TracePoint : public SearchPoint
    */
   RoughVSpeed vario;
 
+  /**
+   * The engine noise level
+   */
+  unsigned engine_noise_level;
+
 public:
   /**
    * Non-initialising constructor.
@@ -116,6 +121,10 @@ public:
 
   fixed GetAltitude() const {
     return altitude;
+  }
+
+  unsigned GetEngineNoiseLevel() const {
+    return engine_noise_level;
   }
 
   /**

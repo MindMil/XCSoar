@@ -29,6 +29,7 @@ TracePoint::TracePoint(const AircraftState &state):
   time((unsigned)state.time),
   drift_factor(sigmoid(state.altitude_agl / 100) * 256),
   altitude(state.altitude),
-  vario(state.netto_vario)
+  vario(state.netto_vario),
+  engine_noise_level(state.engine_noise_level)
 {
 }

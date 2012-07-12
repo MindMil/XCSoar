@@ -126,6 +126,13 @@ struct AircraftState:
   /** global time (seconds UTC) */
   fixed time;
 
+  //####################
+  //   Aircraft State
+  //####################
+
+  /** engine noise level */
+  unsigned engine_noise_level;
+
   //################
   //   Navigation
   //################

@@ -47,6 +47,9 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   /* FLYING_STATE */
   (FlyingState &)aircraft = calculated.flight;
 
+  /* ENGINE STATE */
+  aircraft.engine_noise_level = info.engine_noise_level;
+
   /* AIRCRAFT_STATE */
   aircraft.time = info.time;
   aircraft.location = info.location_available

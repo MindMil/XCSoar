@@ -77,10 +77,11 @@ int main(int argc, char **argv)
 
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
     const TracePoint &point = *i;
-    printf("%u %f %f %d\n",
+    printf("%u %f %f %d %u\n",
            point.GetTime(),
            (double)point.get_location().latitude.Degrees(),
            (double)point.get_location().longitude.Degrees(),
-           point.GetIntegerAltitude());
+           point.GetIntegerAltitude(),
+           point.GetEngineNoiseLevel());
   }
 }
