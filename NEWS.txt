@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.7 - not yet released
+* calculations
+  - use WGS84 earth ellipsoid for distance calculations (#2809)
 * user interface
   - added AutoZoom gesture (up-down)
   - obsolete configuration pages "devices", "polar", "logger info" removed
