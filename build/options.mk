@@ -22,3 +22,7 @@ STOP_WATCH ?= n
 ifeq ($(STOP_WATCH),y)
 TARGET_CPPFLAGS += -DSTOP_WATCH
 endif
+
+ifeq ($(WGS84),y)
+TARGET_CPPFLAGS += -DUSE_WGS84
+endif

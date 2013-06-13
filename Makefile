@@ -37,6 +37,8 @@
 #
 #   LLVM        "y" to compile LLVM bitcode with clang
 #
+#   WGS84       "y" to use WGS84 instead of FAI sphere for distance calculations
+#
 #   LIBCXX      The absolute path of the libc++ svn/git working directory.
 #
 
