@@ -26,22 +26,45 @@ Copyright_License {
 
 #include "DebugReplay.hpp"
 #include "Device/Parser.hpp"
+#include "IO/FileLineReader.hpp"
+#include "Device/Driver.hpp"
+#include "Device/Port/NullPort.hpp"
+#include "Device/Config.hpp"
 
 #include <memory>
 
 class NLineReader;
 class Device;
-struct DeviceRegister;
+static DeviceConfig config;
+static NullPort port;
 
 class DebugReplayNMEA : public DebugReplay {
+  FileLineReaderA *reader;
   std::unique_ptr<Device> device;
 
   NMEAParser parser;
 
+private:
+  DebugReplayNMEA(FileLineReaderA *_reader, const DeviceRegister *driver)
+    : reader(_reader),
+      device(driver->CreateOnPort != NULL
+          ? driver->CreateOnPort(config, port)
+          : NULL) {};
+
+  ~DebugReplayNMEA();
+
 public:
-  DebugReplayNMEA(NLineReader *reader, const DeviceRegister *driver);
+  long Size() const {
+    return reader->GetSize();
+  }
+
+  long Tell() const {
+    return reader->Tell();
+  }
 
   virtual bool Next();
+
+  static DebugReplay* Create(const char *input_file, const tstring &driver_name);
 };
 
 #endif

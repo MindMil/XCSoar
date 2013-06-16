@@ -23,23 +23,28 @@ Copyright_License {
 
 #include "DebugReplayNMEA.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Device/Driver.hpp"
 #include "Device/Register.hpp"
-#include "Device/Port/NullPort.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Config.hpp"
 
-static DeviceConfig config;
-static NullPort port;
+DebugReplay*
+DebugReplayNMEA::Create(const char *input_file, const tstring &driver_name) {
 
-DebugReplayNMEA::DebugReplayNMEA(NLineReader *_reader,
-                                 const DeviceRegister *driver)
-  :DebugReplay(_reader),
-   device(driver->CreateOnPort != NULL
-          ? driver->CreateOnPort(config, port)
-          : NULL)
-{
+  const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
+  if (driver == NULL) {
+    _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
+    return nullptr;
+  }
+
+  FileLineReaderA *reader = new FileLineReaderA(input_file);
+  if (reader->error()) {
+    delete reader;
+    fprintf(stderr, "Failed to open %s\n", input_file);
+    return nullptr;
+  }
+
+  return new DebugReplayNMEA(reader, driver);
 }
+
 
 bool
 DebugReplayNMEA::Next()
@@ -63,4 +68,9 @@ DebugReplayNMEA::Next()
     flying_computer.Finish(calculated.flight, computed_basic.time);
 
   return false;
+}
+
+// this destructor is needed due to the unique_ptr...
+DebugReplayNMEA::~DebugReplayNMEA() {
+  delete reader;
 }

@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "DebugReplay.hpp"
 #include "IGC/IGCExtensions.hpp"
+#include "IO/FileLineReader.hpp"
 
-class NLineReader;
 struct IGCFix;
 
 class DebugReplayIGC : public DebugReplay {
@@ -35,13 +35,30 @@ class DebugReplayIGC : public DebugReplay {
 
   unsigned day;
 
-public:
-  DebugReplayIGC(NLineReader *reader)
-    :DebugReplay(reader), day(0) {
+  FileLineReaderA *reader;
+
+private:
+  DebugReplayIGC(FileLineReaderA *_reader)
+    : day(0), reader(_reader) {
     extensions.clear();
   }
 
+  ~DebugReplayIGC() {
+    delete reader;
+  }
+
+public:
   virtual bool Next();
+
+  long Size() const {
+    return reader->GetSize();
+  }
+
+  long Tell() const {
+    return reader->Tell();
+  }
+
+  static DebugReplay* Create(const char *input_file);
 
 protected:
   void CopyFromFix(const IGCFix &fix);
