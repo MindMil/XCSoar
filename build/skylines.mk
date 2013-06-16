@@ -3,7 +3,8 @@ name-to-bin = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(1))
 INCLUDES += -I$(SKYLINES_SRC) -I$(SKYLINES_TEST_SRC) -I$(TEST_SRC_DIR)
 
 SKYLINES = \
-	skylines_flightreader
+	skylines_flightreader \
+	skylines_flighttimes
 
 skylines: $(call name-to-bin,$(SKYLINES))
 
@@ -14,4 +15,16 @@ SKYLINES_FLIGHTREADER_SOURCES = \
 SKYLINES_FLIGHTREADER_LDADD = $(DEBUG_REPLAY_LDADD)
 SKYLINES_FLIGHTREADER_DEPENDS = MATH UTIL GEO TIME
 $(eval $(call link-program,skylines_flightreader,SKYLINES_FLIGHTREADER))
+
+SKYLINES_FLIGHTTIMES_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SKYLINES_TEST_SRC)/skylines_flighttimes.cpp \
+	$(SKYLINES_SRC)/FlightReader.cpp \
+	$(SKYLINES_SRC)/FlightTimes.cpp \
+	$(SKYLINES_SRC)/DebugReplayVector.cpp \
+	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
+	$(SRC)/Computer/CirclingComputer.cpp
+SKYLINES_FLIGHTTIMES_LDADD = $(DEBUG_REPLAY_LDADD)
+SKYLINES_FLIGHTTIMES_DEPENDS = MATH UTIL GEO TIME
+$(eval $(call link-program,skylines_flighttimes,SKYLINES_FLIGHTTIMES))
 
