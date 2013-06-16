@@ -39,32 +39,40 @@ struct FlightFix {
            latitude;
   } location;
 
+  /* GPS validity */
+  bool gps_valid;
+
   /* GPS altitude */
   double gps_altitude;
+  bool gps_altitude_available;
 
   /* Pressure altitude */
   double pressure_altitude;
+  bool pressure_altitude_available;
 
   /* Engine Noise Level */
   double engine_noise_level;
+  bool engine_noise_level_available;
 
   /* Track, in degrees(!) */
   double track;
+  bool track_available;
 
   /* Ground speed */
   double ground_speed;
+  bool ground_speed_available;
 
   /* True airspeed */
   double tas;
 
   /* Indicated airspeed */
   double ias;
+  bool airspeed_available;
 
   /* Number of satellites available */
   int satellites;
-
-  /* GPS validity */
-  bool gps_valid;
+  bool satellites_available;
 };
+
 
 #endif /* SKYLINES_FLIGHT_H */
