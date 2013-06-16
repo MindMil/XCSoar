@@ -25,7 +25,7 @@
 
 #include <vector>
 
-struct DebugReplay;
+class DebugReplay;
 struct FlightFix;
 
 void Run(DebugReplay &replay, std::vector<FlightFix> &flight_fixes);

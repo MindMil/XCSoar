@@ -45,7 +45,7 @@ struct Result {
 struct MoreData;
 struct FlyingState;
 struct DerivedInfo;
-struct DebugReplay;
+class DebugReplay;
 struct FlightFix;
 
 void Update(const MoreData &basic, const FlyingState &state, Result &result);
