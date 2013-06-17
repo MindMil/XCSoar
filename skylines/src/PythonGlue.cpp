@@ -51,7 +51,12 @@ PyObject* XCSoarTools_LoadIGC(PyXCSoarTools *self, PyObject *args) {
     return NULL;
   }
 
-  FlightReader(input_file, self->flight->fixes);
+  Py_BEGIN_ALLOW_THREADS
+  if (!self->flight->LoadIGC(input_file)) {
+    printf("Can't read flight\n");
+    return NULL;
+  }
+  Py_END_ALLOW_THREADS
 
   Py_RETURN_NONE;
 }

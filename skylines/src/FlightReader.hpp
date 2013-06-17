@@ -30,6 +30,6 @@ struct FlightFix;
 
 void Run(DebugReplay &replay, std::vector<FlightFix> &flight_fixes);
 
-void FlightReader(const char *input_file, std::vector<FlightFix> &flight_fixes);
+bool FlightReader(const char *input_file, std::vector<FlightFix> &flight_fixes);
 
 #endif /* SKYLINES_FLIGHT_READER_H */

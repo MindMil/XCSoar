@@ -67,12 +67,15 @@ Run(DebugReplay &replay, std::vector<FlightFix> &flight_fixes)
   }
 }
 
-void FlightReader(const char *input_file, std::vector<FlightFix> &flight_fixes)
+bool FlightReader(const char *input_file, std::vector<FlightFix> &flight_fixes)
 {
   DebugReplay *replay = DebugReplayIGC::Create(input_file);
 
   if (replay) {
     Run(*replay, flight_fixes);
     delete replay;
+    return true;
   }
+
+  return false;
 }
