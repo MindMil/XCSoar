@@ -51,3 +51,6 @@ for time in times:
   print "Takeoff: {}, location {} {}".format(time['takeoff_time'], time['takeoff_lon'], time['takeoff_lat'])
   print "Release: {}, location {} {}".format(time['release_time'], time['release_lon'], time['release_lat'])
   print "Landing: {}, location {} {}".format(time['landing_time'], time['landing_lon'], time['landing_lat'])
+  flight_path = tools.Path()
+  print flight_path[0]
+  print flight_path[len(flight_path) - 1]
