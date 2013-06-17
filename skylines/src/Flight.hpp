@@ -3,6 +3,7 @@
 
 #include "FlightFix.hpp"
 #include "FlightReader.hpp"
+#include "FlightTimes.hpp"
 #include <vector>
 
 class Flight {
@@ -13,6 +14,12 @@ public:
   /* Load a IGC file into the fixes vector */
   bool LoadIGC(const char *input_file) {
     return FlightReader(input_file, fixes);
+  }
+
+  /* Search for flights within the fixes */
+  unsigned Times(std::vector<Result> &results) {
+    FlightTimes(fixes, results);
+    return results.size();
   }
 };
 

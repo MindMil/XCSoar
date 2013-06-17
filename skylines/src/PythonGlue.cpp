@@ -117,7 +117,9 @@ PyObject* XCSoarTools_Path(PyXCSoarTools *self) {
 PyObject* XCSoarTools_Times(PyXCSoarTools *self) {
   std::vector<Result> results;
 
-  FlightTimes(self->flight->fixes, results); 
+  Py_BEGIN_ALLOW_THREADS
+  self->flight->Times(results);
+  Py_END_ALLOW_THREADS
 
   PyObject *py_times = PyList_New(0);
 
