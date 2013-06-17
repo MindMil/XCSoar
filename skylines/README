@@ -1,0 +1,39 @@
+XCSoar Python API for SkyLines
+==============================
+
+Compile with
+
+ make output/UNIX/bin/libXCSoarTools.so WERROR=n
+
+and copy the library to your desired location, renaming it
+to XCSoarTools.so.
+
+
+Short API description
+---------------------
+
+
+* class XCSoarTools()
+
+Initializes the API
+
+
+* XCSoarTools.LoadIGC(filename)
+
+Loads a IGC file into memory
+
+
+* XCSoarTools.Path()
+
+Returns a list of fixes
+
+
+* XCSoarTools.Times()
+
+Returns a list of takeoff/release/landing times found in the flight
+
+
+* XCSoarTools.Analyse(begin, end, full=512, triangle=1024, sprint=96)
+
+Analyse a flight from begin to end (both DateTime objects), optional
+specifying the number of trace points for the optimiser.
