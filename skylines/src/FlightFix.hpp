@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef SKYLINES_FLIGHT_H
-#define SKYLINES_FLIGHT_H
+#ifndef SKYLINES_FLIGHT_FIX_H
+#define SKYLINES_FLIGHT_FIX_H
 
 #include <cinttypes>
 
@@ -75,4 +75,4 @@ struct FlightFix {
 };
 
 
-#endif /* SKYLINES_FLIGHT_H */
+#endif /* SKYLINES_FLIGHT_FIX_H */
