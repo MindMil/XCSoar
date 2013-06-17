@@ -26,7 +26,6 @@
 
 #include "PythonGlue.hpp"
 #include "Flight.hpp"
-#include "FlightReader.hpp"
 #include "FlightTimes.hpp"
 
 #include <cstdio>
@@ -123,11 +122,6 @@ PyObject* XCSoarTools_Times(PyXCSoarTools *self) {
   PyObject *py_times = PyList_New(0);
 
   for (auto times : results) {
-    if (!times.takeoff_time.IsPlausible()
-        || !times.release_time.IsPlausible()
-        || !times.landing_time.IsPlausible())
-      continue;
-
     PyObject *py_single_flight = PyDict_New();
 
     PyObject *py_takeoff_longitude =

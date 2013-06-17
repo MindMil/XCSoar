@@ -133,7 +133,16 @@ void FlightTimes(const std::vector<FlightFix> &flight_fixes, std::vector<Result>
   while (!eof) {
     Result result;
     eof = Run(*replay, result);
-    results.push_back(result);
+
+    if (result.takeoff_time.IsPlausible()
+        && result.release_time.IsPlausible()
+        && result.landing_time.IsPlausible()) {
+
+      if (result.release_time.ToUnixTimeUTC() < result.takeoff_time.ToUnixTimeUTC())
+        result.release_time = result.takeoff_time;
+
+      results.push_back(result);
+    }
   }
 
   delete replay;
