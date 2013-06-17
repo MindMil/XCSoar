@@ -4,6 +4,9 @@
 #include "FlightFix.hpp"
 #include "FlightReader.hpp"
 #include "FlightTimes.hpp"
+#include "AnalyseFlight.hpp"
+#include "Time/BrokenDateTime.hpp"
+
 #include <vector>
 
 class Flight {
@@ -20,6 +23,14 @@ public:
   unsigned Times(std::vector<Result> &results) {
     FlightTimes(fixes, results);
     return results.size();
+  }
+
+  /* Analyse flight */
+  void Analyse(const BrokenDateTime release_time, const BrokenDateTime landing_time,
+               const unsigned full = 512,
+               const unsigned triangle = 1024,
+               const unsigned sprint = 96) {
+    AnalyseFlight(fixes, release_time, landing_time, full, triangle, sprint);
   }
 };
 

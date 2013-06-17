@@ -54,3 +54,4 @@ for time in times:
   flight_path = tools.Path()
   print flight_path[0]
   print flight_path[len(flight_path) - 1]
+  tools.Analyse(time['release_time'], time['landing_time'], full=1024, triangle=1024, sprint=64)

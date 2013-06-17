@@ -36,11 +36,13 @@ static void XCSoarTools_dealloc(PyXCSoarTools *self);
 static PyObject* XCSoarTools_LoadIGC(PyXCSoarTools *self, PyObject *args);
 static PyObject* XCSoarTools_Path(PyXCSoarTools *self);
 static PyObject* XCSoarTools_Times(PyXCSoarTools *self);
+static PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwargs);
  
 static PyMethodDef XCSoarTools_methods[] = {
   {"LoadIGC", (PyCFunction)XCSoarTools_LoadIGC, METH_VARARGS, "Read IGC file."},
   {"Path", (PyCFunction)XCSoarTools_Path, METH_VARARGS, "Get flight as list."},
   {"Times", (PyCFunction)XCSoarTools_Times, METH_VARARGS, "Get takeoff/release/landing times from flight."},
+  {"Analyse", (PyCFunction)XCSoarTools_Analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
   {NULL, NULL, 0, NULL}
 };
 

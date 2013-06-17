@@ -27,6 +27,7 @@
 #include "PythonGlue.hpp"
 #include "Flight.hpp"
 #include "FlightTimes.hpp"
+#include "Time/BrokenDateTime.hpp"
 
 #include <cstdio>
 #include <vector>
@@ -192,6 +193,50 @@ PyObject* XCSoarTools_Times(PyXCSoarTools *self) {
   }
 
   return py_times;
+}
+
+PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwargs) {
+  static char *kwlist[] = {"begin", "end", "full", "triangle", "sprint", NULL};
+  PyObject *py_begin, *py_end;
+  unsigned full = 512,
+           triangle = 1024,
+           sprint = 96;
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|III", kwlist,
+                                   &py_begin, &py_end, &full, &triangle, &sprint)) {
+    printf("Cannot parse arguments\n");
+    return NULL;
+  }
+
+  if (!PyDateTime_Check(py_begin) || !PyDateTime_Check(py_end)) {
+    printf("Begin and end are no DateTime objects\n");
+    return NULL;
+  }
+
+  BrokenDateTime begin(
+    PyDateTime_GET_YEAR(py_begin),
+    PyDateTime_GET_MONTH(py_begin),
+    PyDateTime_GET_DAY(py_begin),
+    PyDateTime_DATE_GET_HOUR(py_begin),
+    PyDateTime_DATE_GET_MINUTE(py_begin),
+    PyDateTime_DATE_GET_SECOND(py_begin));
+
+  BrokenDateTime end(
+    PyDateTime_GET_YEAR(py_end),
+    PyDateTime_GET_MONTH(py_end),
+    PyDateTime_GET_DAY(py_end),
+    PyDateTime_DATE_GET_HOUR(py_end),
+    PyDateTime_DATE_GET_MINUTE(py_end),
+    PyDateTime_DATE_GET_SECOND(py_end));
+
+  Py_DECREF(py_begin);
+  Py_DECREF(py_end);
+
+  Py_BEGIN_ALLOW_THREADS
+  self->flight->Analyse(begin, end, full, triangle, sprint);
+  Py_END_ALLOW_THREADS
+
+  Py_RETURN_NONE;
 }
 
 PyMODINIT_FUNC initXCSoarTools() {
