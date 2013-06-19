@@ -54,8 +54,8 @@ DebugReplayVector::CopyFromFix(const FlightFix &fix)
   basic.date_time_utc = BrokenDateTime::FromUnixTimeUTC(fix.datetime);
   basic.alive.Update(basic.clock);
 
-  basic.location.longitude = Angle::Degrees(fix.location.longitude);
-  basic.location.latitude = Angle::Degrees(fix.location.latitude);
+  basic.location.longitude = Angle::Degrees(fix.longitude);
+  basic.location.latitude = Angle::Degrees(fix.latitude);
 
   if (fix.gps_valid) {
     basic.location_available.Update(basic.clock);

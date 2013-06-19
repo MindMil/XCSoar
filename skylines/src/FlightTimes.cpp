@@ -21,9 +21,6 @@
 */
 
 #include "FlightTimes.hpp"
-#include "FlightFix.hpp"
-#include "DebugReplayVector.hpp"
-#include "DebugReplayIGC.hpp"
 #include "DebugReplay.hpp"
 
 
@@ -123,16 +120,12 @@ Run(DebugReplay &replay, Result &result)
     return true;
 }
 
-void FlightTimes(const std::vector<FlightFix> &flight_fixes, std::vector<Result> &results)
+void FlightTimes(DebugReplay &replay, std::vector<Result> &results)
 {
-  DebugReplay *replay = DebugReplayVector::Create(flight_fixes);
-
-  if (replay == nullptr) return;
-
   bool eof = false;
   while (!eof) {
     Result result;
-    eof = Run(*replay, result);
+    eof = Run(replay, result);
 
     if (result.takeoff_time.IsPlausible()
         && result.release_time.IsPlausible()
@@ -144,6 +137,4 @@ void FlightTimes(const std::vector<FlightFix> &flight_fixes, std::vector<Result>
       results.push_back(result);
     }
   }
-
-  delete replay;
 }

@@ -21,8 +21,6 @@
 */
 
 #include "AnalyseFlight.hpp"
-#include "FlightFix.hpp"
-#include "DebugReplayVector.hpp"
 #include "DebugReplay.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Contest/ContestManager.hpp"
@@ -74,22 +72,17 @@ SolveContest(Contest contest,
   return manager.GetStats();
 }
 
-void AnalyseFlight(const std::vector<FlightFix> &flight_fixes,
+void AnalyseFlight(DebugReplay &replay,
              const BrokenDateTime release_time, const BrokenDateTime landing_time,
              const unsigned full_points,
              const unsigned triangle_points,
              const unsigned sprint_points)
 {
-  DebugReplay *replay = DebugReplayVector::Create(flight_fixes);
-
-  if (replay == nullptr) return;
-
   Trace full_trace(0, Trace::null_time, full_points);
   Trace triangle_trace(0, Trace::null_time, triangle_points);
   Trace sprint_trace(0, 9000, sprint_points);
 
-  Run(*replay, release_time, landing_time, full_trace, triangle_trace, sprint_trace);
-  delete replay;
+  Run(replay, release_time, landing_time, full_trace, triangle_trace, sprint_trace);
 
   const ContestStatistics olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
   const ContestStatistics dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);

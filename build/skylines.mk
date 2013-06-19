@@ -34,6 +34,7 @@ $(eval $(call link-program,skylines_flighttimes,SKYLINES_FLIGHTTIMES))
 SKYLINES_PYTHON_SOURCES = \
         $(DEBUG_REPLAY_SOURCES) \
         $(SKYLINES_SRC)/FlightReader.cpp \
+        $(SKYLINES_SRC)/Flight.cpp \
         $(SKYLINES_SRC)/FlightTimes.cpp \
         $(SKYLINES_SRC)/DebugReplayVector.cpp \
 	$(SKYLINES_SRC)/AnalyseFlight.cpp \

@@ -23,26 +23,19 @@ def timing(f):
 
 
 @timing
-def init_tools():
-  return XCSoarTools()
+def init_tools(filename, keep):
+  return XCSoarTools(filename, keep=keep)
 
 @timing
-def load_igc(tools, filename):
-  return tools.LoadIGC(filename)
-
-@timing
-def calc_times(tools, flight):
-  return tools.Times(flight)
+def calc_times(tools):
+  return tools.Times()
 
 
 print "Init XCSoarTools"
-tools = init_tools()
-
-print "Loading flight..."
-flight = load_igc(tools, args.file_name)
+tools = init_tools(args.file_name, True)
 
 print "Calculating times..."
-times = calc_times(tools, flight)
+times = calc_times(tools)
 
 print "Found {} flight(s)".format(len(times))
 

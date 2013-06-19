@@ -56,6 +56,6 @@ void Finish(const MoreData &basic, const DerivedInfo &calculated, Result &result
 
 bool Run(DebugReplay &replay, Result &result);
 
-void FlightTimes(const std::vector<FlightFix> &flight_fixes, std::vector<Result> &results);
+void FlightTimes(DebugReplay &replay, std::vector<Result> &results);
 
 #endif

@@ -23,12 +23,11 @@
 #ifndef SKYLINES_ANALYSEFLIGHT_H
 #define SKYLINES_ANALYSEFLIGHT_H
 
-#include "FlightFix.hpp"
-#include "DebugReplayVector.hpp"
-#include "DebugReplay.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Contest/ContestManager.hpp"
 #include "Time/BrokenDateTime.hpp"
+
+class DebugReplay;
 
 void
 Run(DebugReplay &replay, const BrokenDateTime release_time, const BrokenDateTime landing_time,
@@ -39,7 +38,7 @@ ContestStatistics
 SolveContest(Contest contest,
              Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace);
 
-void AnalyseFlight(const std::vector<FlightFix> &flight_fixes,
+void AnalyseFlight(DebugReplay &replay,
              const BrokenDateTime release_time, const BrokenDateTime landing_time,
              const unsigned full_points = 512,
              const unsigned triangle_points = 1024,

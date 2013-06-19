@@ -27,15 +27,27 @@
 #include "PythonGlue.hpp"
 #include "PythonConverters.hpp"
 #include "Flight.hpp"
-#include "FlightTimes.hpp"
 #include "Time/BrokenDateTime.hpp"
 
 #include <cstdio>
 #include <vector>
 
-PyXCSoarTools* XCSoarTools_init(PyXCSoarTools *self, PyObject *args) {
+PyXCSoarTools* XCSoarTools_init(PyXCSoarTools *self, PyObject *args, PyObject *kwargs) {
   /* constructor */
-  self->flight = new Flight();
+  static char *kwlist[] = {"file", "keep", NULL};
+  const char *input_file;
+  bool keep = false;
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "s|b", kwlist,
+                                   &input_file, &keep)) {
+    printf("Cannot parse arguments\n");
+    return NULL;
+  }
+
+  Py_BEGIN_ALLOW_THREADS
+  self->flight = new Flight(input_file, keep);
+  Py_END_ALLOW_THREADS
+
   return 0;
 }
 
@@ -44,33 +56,18 @@ void XCSoarTools_dealloc(PyXCSoarTools *self) {
   delete self->flight;
 }
 
-PyObject* XCSoarTools_LoadIGC(PyXCSoarTools *self, PyObject *args) {
-  const char *input_file;
-
-  if (!PyArg_ParseTuple(args, "s", &input_file)) {
-    printf("Item is not a string\n");
-    return NULL;
-  }
-
-  Py_BEGIN_ALLOW_THREADS
-  if (!self->flight->LoadIGC(input_file)) {
-    printf("Can't read flight\n");
-    return NULL;
-  }
-  Py_END_ALLOW_THREADS
-
-  Py_RETURN_NONE;
-}
-
 PyObject* XCSoarTools_Path(PyXCSoarTools *self) {
   // prepare output
   PyObject *py_fixes = PyList_New(0);
 
-  for (auto fix : self->flight->fixes) {
+  DebugReplay *replay = self->flight->Replay();
+  while (replay->Next()) {
+    const FlightFix fix(replay->Basic());
+
     PyObject *py_fix_datetime = PyInt_FromLong(fix.datetime);
     PyObject *py_fix_time = PyFloat_FromDouble(fix.time);
-    PyObject *py_fix_longitude = PyFloat_FromDouble(fix.location.longitude);
-    PyObject *py_fix_latitude = PyFloat_FromDouble(fix.location.latitude);
+    PyObject *py_fix_longitude = PyFloat_FromDouble(fix.longitude);
+    PyObject *py_fix_latitude = PyFloat_FromDouble(fix.latitude);
     PyObject *py_fix_gps_altitude = PyFloat_FromDouble(fix.gps_altitude);
     PyObject *py_fix_pressure_altitude = PyFloat_FromDouble(fix.pressure_altitude);
     PyObject *py_fix_engine_noise_level = PyFloat_FromDouble(fix.engine_noise_level);
@@ -112,6 +109,8 @@ PyObject* XCSoarTools_Path(PyXCSoarTools *self) {
     Py_DECREF(py_fix_ias);
     Py_DECREF(py_fix_satellites);
   }
+
+  delete replay;
 
   return py_fixes;
 }

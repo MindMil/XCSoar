@@ -13,14 +13,10 @@ Short API description
 ---------------------
 
 
-* class XCSoarTools()
+* class XCSoarTools(file_name, keep=keep)
 
-Initializes the API
-
-
-* XCSoarTools.LoadIGC(filename)
-
-Loads a IGC file into memory
+Initializes the API with igc file $file_name, set
+keep = True if you want to keep the data in memory.
 
 
 * XCSoarTools.Path()
