@@ -25,6 +25,7 @@
 #include <datetime.h>
 
 #include "PythonGlue.hpp"
+#include "PythonConverters.hpp"
 #include "Flight.hpp"
 #include "FlightTimes.hpp"
 #include "Time/BrokenDateTime.hpp"
@@ -131,40 +132,19 @@ PyObject* XCSoarTools_Times(PyXCSoarTools *self) {
       PyFloat_FromDouble(times.takeoff_location.longitude.Degrees());
     PyObject *py_takeoff_latitude =
       PyFloat_FromDouble(times.takeoff_location.latitude.Degrees());
-    PyObject *py_takeoff_datetime = PyDateTime_FromDateAndTime(
-        times.takeoff_time.year,
-        times.takeoff_time.month,
-        times.takeoff_time.day,
-        times.takeoff_time.hour,
-        times.takeoff_time.minute,
-        times.takeoff_time.second,
-        0);
+    PyObject *py_takeoff_datetime = Python::BrokenDateTimeToPy(times.takeoff_time);
 
     PyObject *py_release_longitude =
       PyFloat_FromDouble(times.release_location.longitude.Degrees());
     PyObject *py_release_latitude =
       PyFloat_FromDouble(times.release_location.latitude.Degrees());
-    PyObject *py_release_datetime = PyDateTime_FromDateAndTime(
-        times.release_time.year,
-        times.release_time.month,
-        times.release_time.day,
-        times.release_time.hour,
-        times.release_time.minute,
-        times.release_time.second,
-        0);
+    PyObject *py_release_datetime = Python::BrokenDateTimeToPy(times.release_time);
 
     PyObject *py_landing_longitude =
       PyFloat_FromDouble(times.landing_location.longitude.Degrees());
     PyObject *py_landing_latitude =
       PyFloat_FromDouble(times.landing_location.latitude.Degrees());
-    PyObject *py_landing_datetime = PyDateTime_FromDateAndTime(
-        times.landing_time.year,
-        times.landing_time.month,
-        times.landing_time.day,
-        times.landing_time.hour,
-        times.landing_time.minute,
-        times.landing_time.second,
-        0);
+    PyObject *py_landing_datetime = Python::BrokenDateTimeToPy(times.landing_time);
 
     PyDict_SetItemString(py_single_flight, "takeoff_lon", py_takeoff_longitude);
     PyDict_SetItemString(py_single_flight, "takeoff_lat", py_takeoff_latitude);
@@ -213,21 +193,8 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
     return NULL;
   }
 
-  BrokenDateTime begin(
-    PyDateTime_GET_YEAR(py_begin),
-    PyDateTime_GET_MONTH(py_begin),
-    PyDateTime_GET_DAY(py_begin),
-    PyDateTime_DATE_GET_HOUR(py_begin),
-    PyDateTime_DATE_GET_MINUTE(py_begin),
-    PyDateTime_DATE_GET_SECOND(py_begin));
-
-  BrokenDateTime end(
-    PyDateTime_GET_YEAR(py_end),
-    PyDateTime_GET_MONTH(py_end),
-    PyDateTime_GET_DAY(py_end),
-    PyDateTime_DATE_GET_HOUR(py_end),
-    PyDateTime_DATE_GET_MINUTE(py_end),
-    PyDateTime_DATE_GET_SECOND(py_end));
+  BrokenDateTime begin =  Python::PyToBrokenDateTime(py_begin);
+  BrokenDateTime end = Python::PyToBrokenDateTime(py_end);
 
   Py_DECREF(py_begin);
   Py_DECREF(py_end);
