@@ -33,7 +33,7 @@ struct PyXCSoarTools {
 static PyXCSoarTools* XCSoarTools_init(PyXCSoarTools *self, PyObject *args, PyObject *kwargs);
 static void XCSoarTools_dealloc(PyXCSoarTools *self);
 
-static PyObject* XCSoarTools_Path(PyXCSoarTools *self);
+static PyObject* XCSoarTools_Path(PyXCSoarTools *self, PyObject *args);
 static PyObject* XCSoarTools_Times(PyXCSoarTools *self);
 static PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwargs);
  

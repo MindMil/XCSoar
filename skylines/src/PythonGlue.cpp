@@ -32,6 +32,8 @@
 
 #include <cstdio>
 #include <vector>
+#include <cinttypes>
+#include <limits>
 
 PyXCSoarTools* XCSoarTools_init(PyXCSoarTools *self, PyObject *args, PyObject *kwargs) {
   /* constructor */
@@ -57,12 +59,36 @@ void XCSoarTools_dealloc(PyXCSoarTools *self) {
   delete self->flight;
 }
 
-PyObject* XCSoarTools_Path(PyXCSoarTools *self) {
+PyObject* XCSoarTools_Path(PyXCSoarTools *self, PyObject *args) {
+  PyObject *py_begin = NULL,
+           *py_end = NULL;
+
+  if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
+    printf("Cannot parse arguments\n");
+    return NULL;
+  }
+
+  int64_t begin = 0,
+          end = std::numeric_limits<int64_t>::max();
+
+  if (py_begin != NULL && PyDateTime_Check(py_begin))
+    begin = Python::PyToBrokenDateTime(py_begin).ToUnixTimeUTC();
+
+  if (py_end != NULL && PyDateTime_Check(py_end))
+    end = Python::PyToBrokenDateTime(py_end).ToUnixTimeUTC();
+
   // prepare output
   PyObject *py_fixes = PyList_New(0);
 
   DebugReplay *replay = self->flight->Replay();
   while (replay->Next()) {
+    const int64_t date_time_utc = replay->Basic().date_time_utc.ToUnixTimeUTC();
+
+    if (date_time_utc < begin)
+      continue;
+    else if (date_time_utc > end)
+      break;
+
     const FlightFix fix(replay->Basic());
 
     PyObject *py_fix_datetime = PyInt_FromLong(fix.datetime);
