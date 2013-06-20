@@ -1,8 +1,7 @@
 CXX_FEATURES = -fno-exceptions -fno-rtti
-CXX_FEATURES += -std=c++11
+CXX_FEATURES += -std=gnu++0x
 CXX_FEATURES += -fno-threadsafe-statics
 CXX_FEATURES += -fmerge-all-constants
-CXX_FEATURES += -fPIC
 
 ifeq ($(CLANG),n)
 CXX_FEATURES += -fconserve-space -fno-operator-names
@@ -17,8 +16,8 @@ C_FEATURES =
 endif
 
 ifeq ($(HAVE_WIN32),n)
-#CXX_FEATURES += -fvisibility=hidden
-#C_FEATURES += -fvisibility=hidden
+CXX_FEATURES += -fvisibility=hidden
+C_FEATURES += -fvisibility=hidden
 endif
 
 ifeq ($(DEBUG)$(HAVE_WIN32)$(TARGET_IS_DARWIN),nnn)
@@ -35,6 +34,5 @@ ALL_CPPFLAGS = $(TARGET_INCLUDES) $(INCLUDES) $(TARGET_CPPFLAGS) $(CPPFLAGS) $(E
 ALL_CXXFLAGS = $(OPTIMIZE) $(FLAGS_PROFILE) $(CXX_FEATURES) $(CXXFLAGS) $(EXTRA_CXXFLAGS)
 ALL_CFLAGS = $(OPTIMIZE) $(FLAGS_PROFILE) $(C_FEATURES) $(CFLAGS) $(EXTRA_CFLAGS)
 
-ALL_LDFLAGS = -shared
-#$(filter-out -emit-llvm,$(OPTIMIZE)) $(TARGET_LDFLAGS) $(FLAGS_PROFILE) $(LDFLAGS)
+ALL_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE)) $(TARGET_LDFLAGS) $(FLAGS_PROFILE) $(LDFLAGS)
 ALL_LDLIBS = $(TARGET_LDLIBS) $(COVERAGE_LDLIBS) $(LDLIBS)
