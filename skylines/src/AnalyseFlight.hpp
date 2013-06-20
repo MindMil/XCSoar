@@ -25,11 +25,13 @@
 
 #include "Contest/ContestManager.hpp"
 #include "Time/BrokenDateTime.hpp"
+#include "FlightPhaseDetector.hpp"
 
 class DebugReplay;
 class Trace;
 
 void
+Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
     const BrokenDateTime &takeoff_time,
     const BrokenDateTime &release_time,
     const BrokenDateTime &landing_time,
@@ -45,6 +47,8 @@ void AnalyseFlight(DebugReplay &replay,
              const BrokenDateTime &landing_time,
              ContestStatistics &olc_plus,
              ContestStatistics &dmst,
+             PhaseList &phase_list,
+             PhaseTotals &phase_totals,
              const unsigned full_points = 512,
              const unsigned triangle_points = 1024,
              const unsigned sprint_points = 96);

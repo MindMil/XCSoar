@@ -26,8 +26,12 @@
 #include "Contest/ContestManager.hpp"
 #include "Math/Angle.hpp"
 #include "Time/BrokenDateTime.hpp"
+#include "Computer/CirclingComputer.hpp"
+#include "Computer/Settings.hpp"
+#include "FlightPhaseDetector.hpp"
 
 void
+Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
     const BrokenDateTime &takeoff_time,
     const BrokenDateTime &release_time,
     const BrokenDateTime &landing_time,
@@ -37,16 +41,30 @@ void
   constexpr Angle max_longitude_change = Angle::Degrees(30);
   constexpr Angle max_latitude_change = Angle::Degrees(1);
 
+  CirclingSettings circling_settings;
+  circling_settings.SetDefaults();
+  CirclingComputer circling_computer;
+
   const int64_t takeoff_unix = takeoff_time.ToUnixTimeUTC();
   const int64_t release_unix = release_time.ToUnixTimeUTC();
   const int64_t landing_unix = landing_time.ToUnixTimeUTC();
 
   while (replay.Next()) {
+    circling_computer.TurnRate(replay.SetCalculated(),
+                               replay.Basic(),
+                               replay.Calculated().flight);
+    circling_computer.Turning(replay.SetCalculated(),
+                              replay.Basic(),
+                              replay.Calculated().flight,
+                              circling_settings);
+
     const MoreData &basic = replay.Basic();
     const int64_t date_time_utc = basic.date_time_utc.ToUnixTimeUTC();
 
     if (date_time_utc < takeoff_unix || date_time_utc > landing_unix)
       continue;
+
+    flight_phase_detector.Update(replay.Basic(), replay.Calculated());
 
     last_location = basic.location;
 
@@ -66,6 +84,8 @@ void
       sprint_trace.push_back(point);
     }
   }
+
+  flight_phase_detector.Finish();
 }
 
 ContestStatistics
@@ -83,6 +103,8 @@ void AnalyseFlight(DebugReplay &replay,
              const BrokenDateTime &landing_time,
              ContestStatistics &olc_plus,
              ContestStatistics &dmst,
+             PhaseList &phase_list,
+             PhaseTotals &phase_totals,
              const unsigned full_points,
              const unsigned triangle_points,
              const unsigned sprint_points)
@@ -90,11 +112,15 @@ void AnalyseFlight(DebugReplay &replay,
   Trace full_trace(0, Trace::null_time, full_points);
   Trace triangle_trace(0, Trace::null_time, triangle_points);
   Trace sprint_trace(0, 9000, sprint_points);
+  FlightPhaseDetector flight_phase_detector;
 
-  Run(replay,
+  Run(replay, flight_phase_detector,
       takeoff_time, release_time, landing_time,
       full_trace, triangle_trace, sprint_trace);
 
   olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
   dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);
+
+  phase_list = flight_phase_detector.GetPhases();
+  phase_totals = flight_phase_detector.GetTotals();
 }

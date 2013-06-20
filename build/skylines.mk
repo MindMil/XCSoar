@@ -111,7 +111,9 @@ SKYLINES_PYTHON_SOURCES = \
 	$(SKYLINES_SRC)/PythonGlue.cpp \
 	$(SKYLINES_SRC)/PythonConverters.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
-	$(ENGINE_SRC_DIR)/Trace/Trace.cpp
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(SRC)/Computer/CirclingComputer.cpp \
+	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp
 SKYLINES_PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
 SKYLINES_PYTHON_LDLIBS = -lpython2.7
 SKYLINES_PYTHON_DEPENDS = CONTEST UTIL GEO TIME MATH

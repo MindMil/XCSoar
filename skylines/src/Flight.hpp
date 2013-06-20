@@ -7,6 +7,7 @@
 
 #include "DebugReplayIGC.hpp"
 #include "DebugReplayVector.hpp"
+#include "FlightPhaseDetector.hpp"
 
 #include <vector>
 
@@ -39,12 +40,15 @@ public:
                const BrokenDateTime landing_time,
                ContestStatistics &olc_plus,
                ContestStatistics &dmst,
+               PhaseList &phase_list,
+               PhaseTotals &phase_totals,
                const unsigned full = 512,
                const unsigned triangle = 1024,
                const unsigned sprint = 96) {
     DebugReplay *replay = Replay();
     AnalyseFlight(*replay, takeoff_time, release_time, landing_time,
                   olc_plus, dmst,
+                  phase_list, phase_totals,
                   full, triangle, sprint);
     delete replay;
   }

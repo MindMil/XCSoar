@@ -28,6 +28,7 @@
 #include "PythonConverters.hpp"
 #include "Flight.hpp"
 #include "Time/BrokenDateTime.hpp"
+#include "FlightPhaseDetector.hpp"
 
 #include <cstdio>
 #include <vector>
@@ -199,9 +200,13 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
   ContestStatistics olc_plus;
   ContestStatistics dmst;
 
+  PhaseList phase_list;
+  PhaseTotals phase_totals;
+
   Py_BEGIN_ALLOW_THREADS
   self->flight->Analyse(takeoff, release, landing,
     olc_plus, dmst,
+    phase_list, phase_totals,
     full, triangle, sprint);
   Py_END_ALLOW_THREADS
 
