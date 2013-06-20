@@ -28,13 +28,16 @@
 #include "Time/BrokenDateTime.hpp"
 
 void
-Run(DebugReplay &replay, const BrokenDateTime release_time, const BrokenDateTime landing_time,
+    const BrokenDateTime &takeoff_time,
+    const BrokenDateTime &release_time,
+    const BrokenDateTime &landing_time,
     Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace)
 {
   GeoPoint last_location = GeoPoint::Invalid();
   constexpr Angle max_longitude_change = Angle::Degrees(30);
   constexpr Angle max_latitude_change = Angle::Degrees(1);
 
+  const int64_t takeoff_unix = takeoff_time.ToUnixTimeUTC();
   const int64_t release_unix = release_time.ToUnixTimeUTC();
   const int64_t landing_unix = landing_time.ToUnixTimeUTC();
 
@@ -42,7 +45,7 @@ Run(DebugReplay &replay, const BrokenDateTime release_time, const BrokenDateTime
     const MoreData &basic = replay.Basic();
     const int64_t date_time_utc = basic.date_time_utc.ToUnixTimeUTC();
 
-    if (date_time_utc < release_unix || date_time_utc > landing_unix)
+    if (date_time_utc < takeoff_unix || date_time_utc > landing_unix)
       continue;
 
     last_location = basic.location;
@@ -56,10 +59,12 @@ Run(DebugReplay &replay, const BrokenDateTime release_time, const BrokenDateTime
          obviously broken */
       break;
 
-    const TracePoint point(basic);
-    full_trace.push_back(point);
-    triangle_trace.push_back(point);
-    sprint_trace.push_back(point);
+    if (date_time_utc >= release_unix) {
+      const TracePoint point(basic);
+      full_trace.push_back(point);
+      triangle_trace.push_back(point);
+      sprint_trace.push_back(point);
+    }
   }
 }
 
@@ -73,8 +78,9 @@ SolveContest(Contest contest,
 }
 
 void AnalyseFlight(DebugReplay &replay,
-             const BrokenDateTime release_time,
-             const BrokenDateTime landing_time,
+             const BrokenDateTime &takeoff_time,
+             const BrokenDateTime &release_time,
+             const BrokenDateTime &landing_time,
              ContestStatistics &olc_plus,
              ContestStatistics &dmst,
              const unsigned full_points,
@@ -85,7 +91,9 @@ void AnalyseFlight(DebugReplay &replay,
   Trace triangle_trace(0, Trace::null_time, triangle_points);
   Trace sprint_trace(0, 9000, sprint_points);
 
-  Run(replay, release_time, landing_time, full_trace, triangle_trace, sprint_trace);
+  Run(replay,
+      takeoff_time, release_time, landing_time,
+      full_trace, triangle_trace, sprint_trace);
 
   olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
   dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);

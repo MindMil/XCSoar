@@ -23,24 +23,26 @@
 #ifndef SKYLINES_ANALYSEFLIGHT_H
 #define SKYLINES_ANALYSEFLIGHT_H
 
-#include "Engine/Trace/Trace.hpp"
 #include "Contest/ContestManager.hpp"
 #include "Time/BrokenDateTime.hpp"
 
 class DebugReplay;
+class Trace;
 
 void
-Run(DebugReplay &replay, const BrokenDateTime release_time, const BrokenDateTime landing_time,
+    const BrokenDateTime &takeoff_time,
+    const BrokenDateTime &release_time,
+    const BrokenDateTime &landing_time,
     Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace);
 
-gcc_pure
 ContestStatistics
 SolveContest(Contest contest,
              Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace);
 
 void AnalyseFlight(DebugReplay &replay,
-             const BrokenDateTime release_time,
-             const BrokenDateTime landing_time,
+             const BrokenDateTime &takeoff_time,
+             const BrokenDateTime &release_time,
+             const BrokenDateTime &landing_time,
              ContestStatistics &olc_plus,
              ContestStatistics &dmst,
              const unsigned full_points = 512,

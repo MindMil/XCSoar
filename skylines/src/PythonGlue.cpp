@@ -175,31 +175,34 @@ PyObject* XCSoarTools_Times(PyXCSoarTools *self) {
 }
 
 PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwargs) {
-  static char *kwlist[] = {"begin", "end", "full", "triangle", "sprint", NULL};
-  PyObject *py_begin, *py_end;
+  static char *kwlist[] = {"takeoff", "release", "landing", "full", "triangle", "sprint", NULL};
+  PyObject *py_takeoff, *py_release, *py_landing;
   unsigned full = 512,
            triangle = 1024,
            sprint = 96;
 
-  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|III", kwlist,
-                                   &py_begin, &py_end, &full, &triangle, &sprint)) {
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OOO|III", kwlist,
+                                   &py_takeoff, &py_release, &py_landing, &full, &triangle, &sprint)) {
     printf("Cannot parse arguments\n");
     return NULL;
   }
 
-  if (!PyDateTime_Check(py_begin) || !PyDateTime_Check(py_end)) {
+  if (!PyDateTime_Check(py_takeoff) || !PyDateTime_Check(py_release) || !PyDateTime_Check(py_landing)) {
     printf("Begin and end are no DateTime objects\n");
     return NULL;
   }
 
-  BrokenDateTime begin =  Python::PyToBrokenDateTime(py_begin);
-  BrokenDateTime end = Python::PyToBrokenDateTime(py_end);
+  BrokenDateTime takeoff = Python::PyToBrokenDateTime(py_takeoff);
+  BrokenDateTime release = Python::PyToBrokenDateTime(py_release);
+  BrokenDateTime landing = Python::PyToBrokenDateTime(py_landing);
 
   ContestStatistics olc_plus;
   ContestStatistics dmst;
 
   Py_BEGIN_ALLOW_THREADS
-  self->flight->Analyse(begin, end, olc_plus, dmst, full, triangle, sprint);
+  self->flight->Analyse(takeoff, release, landing,
+    olc_plus, dmst,
+    full, triangle, sprint);
   Py_END_ALLOW_THREADS
 
   PyObject *py_result = PyDict_New();
