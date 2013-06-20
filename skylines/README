@@ -3,10 +3,9 @@ XCSoar Python API for SkyLines
 
 Compile with
 
- make output/UNIX/bin/libXCSoarTools.so WERROR=n
+ make skylines
 
-and copy the library to your desired location, renaming it
-to XCSoarTools.so.
+and copy the library to your desired location.
 
 
 Short API description

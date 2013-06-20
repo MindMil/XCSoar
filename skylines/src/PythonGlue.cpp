@@ -205,7 +205,9 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
   Py_RETURN_NONE;
 }
 
-PyMODINIT_FUNC initXCSoarTools() {
+PyMODINIT_FUNC
+__attribute__ ((visibility("default")))
+initXCSoarTools() {
   PyObject* m;
 
   if (PyType_Ready(&XCSoarToolsType) < 0)
