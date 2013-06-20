@@ -49,6 +49,11 @@ for dtime in times:
   print "Takeoff: {}, location {} {}".format(dtime['takeoff_time'], dtime['takeoff_lon'], dtime['takeoff_lat'])
   print "Release: {}, location {} {}".format(dtime['release_time'], dtime['release_lon'], dtime['release_lat'])
   print "Landing: {}, location {} {}".format(dtime['landing_time'], dtime['landing_lon'], dtime['landing_lat'])
+
+  fixes = tools.Path(dtime['takeoff_time'], dtime['release_time'])
+  for fix in fixes:
+    print fix
+
   pprint(calc_analyse(tools, dtime['takeoff_time'], dtime['release_time'], dtime['landing_time'], \
          1024, 1024, 64))
 
