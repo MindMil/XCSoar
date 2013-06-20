@@ -29,6 +29,24 @@
 #include "Time/BrokenDateTime.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
 #include "Engine/Contest/ContestResult.hpp"
+PyObject* Python::BrokenDateTimeToPy(const BrokenDateTime &datetime) {
+  PyDateTime_IMPORT;
+
+  return PyDateTime_FromDateAndTime(
+    datetime.year, datetime.month, datetime.day,
+    datetime.hour, datetime.minute, datetime.second,
+    0);
+};
+
+BrokenDateTime Python::PyToBrokenDateTime(PyObject *py_datetime) {
+  return BrokenDateTime(
+    PyDateTime_GET_YEAR(py_datetime),
+    PyDateTime_GET_MONTH(py_datetime),
+    PyDateTime_GET_DAY(py_datetime),
+    PyDateTime_DATE_GET_HOUR(py_datetime),
+    PyDateTime_DATE_GET_MINUTE(py_datetime),
+    PyDateTime_DATE_GET_SECOND(py_datetime));
+};
 
 PyObject* Python::WriteLonLat(const GeoPoint &location) {
   PyObject *py_location = PyDict_New();

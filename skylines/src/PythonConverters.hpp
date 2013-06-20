@@ -36,25 +36,12 @@ namespace Python {
   /**
    * Convert a XCSoar BrokenDateTime to a Python DateTime object
    */
-  inline PyObject* BrokenDateTimeToPy(const BrokenDateTime &datetime) {
-    return PyDateTime_FromDateAndTime(
-      datetime.year, datetime.month, datetime.day,
-      datetime.hour, datetime.minute, datetime.second,
-      0);
-  };
+  PyObject* BrokenDateTimeToPy(const BrokenDateTime &datetime);
 
   /**
    * Convert a Python DateTime object to XCSoar BrokenDateTime
    */
-  inline BrokenDateTime PyToBrokenDateTime(PyObject *py_datetime) {
-    return BrokenDateTime(
-      PyDateTime_GET_YEAR(py_datetime),
-      PyDateTime_GET_MONTH(py_datetime),
-      PyDateTime_GET_DAY(py_datetime),
-      PyDateTime_DATE_GET_HOUR(py_datetime),
-      PyDateTime_DATE_GET_MINUTE(py_datetime),
-      PyDateTime_DATE_GET_SECOND(py_datetime));
-  };
+  BrokenDateTime PyToBrokenDateTime(PyObject *py_datetime);
 
   /**
    * Convert a event (datetime + location) to a python dict
