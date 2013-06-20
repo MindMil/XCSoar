@@ -73,7 +73,10 @@ SolveContest(Contest contest,
 }
 
 void AnalyseFlight(DebugReplay &replay,
-             const BrokenDateTime release_time, const BrokenDateTime landing_time,
+             const BrokenDateTime release_time,
+             const BrokenDateTime landing_time,
+             ContestStatistics &olc_plus,
+             ContestStatistics &dmst,
              const unsigned full_points,
              const unsigned triangle_points,
              const unsigned sprint_points)
@@ -84,9 +87,6 @@ void AnalyseFlight(DebugReplay &replay,
 
   Run(replay, release_time, landing_time, full_trace, triangle_trace, sprint_trace);
 
-  const ContestStatistics olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
-  const ContestStatistics dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);
-
-  printf("olc_plus_score: %f\n", olc_plus.GetResult(2).score);
-  printf("dmst_score: %f\n", dmst.GetResult(0).score);
+  olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
+  dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);
 }

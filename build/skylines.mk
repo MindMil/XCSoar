@@ -109,6 +109,7 @@ SKYLINES_PYTHON_SOURCES = \
         $(SKYLINES_SRC)/DebugReplayVector.cpp \
 	$(SKYLINES_SRC)/AnalyseFlight.cpp \
 	$(SKYLINES_SRC)/PythonGlue.cpp \
+	$(SKYLINES_SRC)/PythonConverters.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp
 SKYLINES_PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)

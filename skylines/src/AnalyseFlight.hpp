@@ -39,9 +39,11 @@ SolveContest(Contest contest,
              Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace);
 
 void AnalyseFlight(DebugReplay &replay,
-             const BrokenDateTime release_time, const BrokenDateTime landing_time,
+             const BrokenDateTime release_time,
+             const BrokenDateTime landing_time,
+             ContestStatistics &olc_plus,
+             ContestStatistics &dmst,
              const unsigned full_points = 512,
              const unsigned triangle_points = 1024,
              const unsigned sprint_points = 96);
-
 #endif

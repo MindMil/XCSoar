@@ -34,12 +34,15 @@ public:
   }
 
   /* Analyse flight */
-  void Analyse(const BrokenDateTime release_time, const BrokenDateTime landing_time,
+  void Analyse(const BrokenDateTime release_time,
+               const BrokenDateTime landing_time,
+               ContestStatistics &olc_plus,
+               ContestStatistics &dmst,
                const unsigned full = 512,
                const unsigned triangle = 1024,
                const unsigned sprint = 96) {
     DebugReplay *replay = Replay();
-    AnalyseFlight(*replay, release_time, landing_time, full, triangle, sprint);
+    AnalyseFlight(*replay, release_time, landing_time, olc_plus, dmst, full, triangle, sprint);
     delete replay;
   }
 

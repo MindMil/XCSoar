@@ -198,11 +198,45 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
   Py_DECREF(py_begin);
   Py_DECREF(py_end);
 
+  ContestStatistics olc_plus;
+  ContestStatistics dmst;
+
   Py_BEGIN_ALLOW_THREADS
-  self->flight->Analyse(begin, end, full, triangle, sprint);
+  self->flight->Analyse(begin, end, olc_plus, dmst, full, triangle, sprint);
   Py_END_ALLOW_THREADS
 
-  Py_RETURN_NONE;
+  PyObject *py_result = PyDict_New();
+
+  /* write olc_plus statistics */
+  PyObject *py_olc_plus = PyDict_New();
+
+  PyObject *py_classic = Python::WriteContest(olc_plus.result[0], olc_plus.solution[0]);
+  PyObject *py_triangle = Python::WriteContest(olc_plus.result[1], olc_plus.solution[1]);
+  PyObject *py_plus = Python::WriteContest(olc_plus.result[2], olc_plus.solution[2]);
+
+  PyDict_SetItemString(py_olc_plus, "classic", py_classic);
+  PyDict_SetItemString(py_olc_plus, "triangle", py_triangle);
+  PyDict_SetItemString(py_olc_plus, "plus", py_plus);
+
+  Py_DECREF(py_classic);
+  Py_DECREF(py_triangle);
+  Py_DECREF(py_plus);
+
+  PyDict_SetItemString(py_result, "olc_plus", py_olc_plus);
+  Py_DECREF(py_olc_plus);
+
+  /* write dmst statistics */
+  PyObject *py_dmst = PyDict_New();
+
+  PyObject *py_quadrilateral = Python::WriteContest(dmst.result[0], dmst.solution[0]);
+  PyDict_SetItemString(py_dmst, "quadrilateral", py_quadrilateral);
+  Py_DECREF(py_quadrilateral);
+
+  PyDict_SetItemString(py_result, "dmst", py_dmst);
+  Py_DECREF(py_dmst);
+
+
+  return py_result;
 }
 
 PyMODINIT_FUNC
