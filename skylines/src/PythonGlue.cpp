@@ -195,9 +195,6 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
   BrokenDateTime begin =  Python::PyToBrokenDateTime(py_begin);
   BrokenDateTime end = Python::PyToBrokenDateTime(py_end);
 
-  Py_DECREF(py_begin);
-  Py_DECREF(py_end);
-
   ContestStatistics olc_plus;
   ContestStatistics dmst;
 
