@@ -24,12 +24,14 @@
 #define SKYLINES_PYTHONCONVERTERS_H
 
 #include <Python.h>
-#include <Time/BrokenDateTime.hpp>
 
+class BrokenDateTime;
 class ContestResult;
 class ContestTraceVector;
 class ContestTracePoint;
 class GeoPoint;
+struct Phase;
+struct PhaseTotals;
 
 namespace Python {
 
@@ -58,10 +60,15 @@ namespace Python {
    * Convert two points to a python dict with leg statistics
    */
   PyObject* WritePoint(const ContestTracePoint &point,
-                              const ContestTracePoint *previous);
+                       const ContestTracePoint *previous);
 
   PyObject* WriteContest(const ContestResult &result,
-                                const ContestTraceVector &trace);
+                         const ContestTraceVector &trace);
+
+  PyObject* WritePhase(const Phase &phase);
+  PyObject* WriteCirclingStats(const Phase &stats);
+  PyObject* WriteCruiseStats(const Phase &stats);
+  PyObject* WritePerformanceStats(const PhaseTotals &totals);
 };
 
 #endif /* SKYLINES_PYTHONCONVERTERS_H */

@@ -240,6 +240,24 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
   PyDict_SetItemString(py_result, "dmst", py_dmst);
   Py_DECREF(py_dmst);
 
+  /* write fligh phases */
+  PyObject *py_phases = PyList_New(0);
+
+  for (Phase phase : phase_list) {
+    PyObject *py_phase = Python::WritePhase(phase);
+    if (PyList_Append(py_phases, py_phase))
+      return NULL;
+
+    Py_DECREF(py_phase);
+  }
+
+  PyDict_SetItemString(py_result, "phases", py_phases);
+  Py_DECREF(py_phases);
+
+  /* write performance stats */
+  PyObject *py_performance = Python::WritePerformanceStats(phase_totals);
+  PyDict_SetItemString(py_result, "performance", py_performance);
+  Py_DECREF(py_performance);
 
   return py_result;
 }

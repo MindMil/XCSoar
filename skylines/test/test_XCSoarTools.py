@@ -31,21 +31,26 @@ def init_tools(filename, keep):
 def calc_times(tools):
   return tools.Times()
 
+@timing
+def calc_analyse(tools, takeoff, release, landing, full, triangle, sprint):
+  return tools.Analyse(takeoff, release, landing, full=full, triangle=triangle, sprint=sprint)
+
 
 print "Init XCSoarTools"
-tools = init_tools(args.file_name, True)
+tools = init_tools(args.file_name, False)
 
 print "Calculating times..."
 times = calc_times(tools)
 
 print "Found {} flight(s)".format(len(times))
 
-for time in times:
+for dtime in times:
   print
-  print "Takeoff: {}, location {} {}".format(time['takeoff_time'], time['takeoff_lon'], time['takeoff_lat'])
-  print "Release: {}, location {} {}".format(time['release_time'], time['release_lon'], time['release_lat'])
-  print "Landing: {}, location {} {}".format(time['landing_time'], time['landing_lon'], time['landing_lat'])
-  flight_path = tools.Path()
-  print flight_path[0]
-  print flight_path[len(flight_path) - 1]
-  pprint(tools.Analyse(time['release_time'], time['landing_time'], full=1024, triangle=1024, sprint=64))
+  print "Takeoff: {}, location {} {}".format(dtime['takeoff_time'], dtime['takeoff_lon'], dtime['takeoff_lat'])
+  print "Release: {}, location {} {}".format(dtime['release_time'], dtime['release_lon'], dtime['release_lat'])
+  print "Landing: {}, location {} {}".format(dtime['landing_time'], dtime['landing_lon'], dtime['landing_lat'])
+  pprint(calc_analyse(tools, dtime['takeoff_time'], dtime['release_time'], dtime['landing_time'], \
+         1024, 1024, 64))
+
+del tools
+
