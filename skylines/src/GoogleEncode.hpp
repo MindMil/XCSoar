@@ -30,6 +30,7 @@
 #include <list>
 #include <utility>
 #include <vector>
+#include <memory>
 
 struct FlightFix;
 
@@ -44,7 +45,7 @@ private:
   std::string encodeNumber(int num);
     
 public:
-  std::auto_ptr<std::pair<std::string, std::string>>
+  std::unique_ptr<std::pair<std::string, std::string>>
   encode(std::vector<FlightFix> &fixes, std::vector<int> &levels);
 
   std::string encodeList(std::list<int> &points);

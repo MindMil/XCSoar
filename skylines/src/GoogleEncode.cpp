@@ -30,6 +30,7 @@
 #include <list>
 #include <utility>
 #include <vector>
+#include <memory>
 
 std::string GoogleEncode::encodeSignedNumber(int num) {
   int sgn_num = num << 1;
@@ -56,7 +57,7 @@ std::string GoogleEncode::encodeNumber(int num) {
   return encoded_string.str();
 }
 
-std::auto_ptr<std::pair<std::string, std::string>>
+std::unique_ptr<std::pair<std::string, std::string>>
 GoogleEncode::encode(std::vector<FlightFix> &fixes, std::vector<int> &levels) {
   std::ostringstream encoded_levels,
                      encoded_points;
@@ -84,7 +85,7 @@ GoogleEncode::encode(std::vector<FlightFix> &fixes, std::vector<int> &levels) {
     }
   }
     
-  std::auto_ptr<std::pair<std::string, std::string>> r(new std::pair<std::string, std::string>);
+  std::unique_ptr<std::pair<std::string, std::string>> r(new std::pair<std::string, std::string>);
   r->first = encoded_points.str();
   r->second = encoded_levels.str();
 
