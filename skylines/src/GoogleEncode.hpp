@@ -31,6 +31,8 @@
 #include <utility>
 #include <vector>
 
+struct FlightFix;
+
 class GoogleEncode {
 private:
   inline int floor1e5(double coordinate) {
@@ -43,7 +45,7 @@ private:
     
 public:
   std::auto_ptr<std::pair<std::string, std::string>>
-  encode(std::vector<std::pair<double, double>> &points, std::vector<int> &levels);
+  encode(std::vector<FlightFix> &fixes, std::vector<int> &levels);
 
   std::string encodeList(std::list<int> &points);
 };

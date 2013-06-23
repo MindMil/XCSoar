@@ -23,9 +23,13 @@
 */
 
 #include "GoogleEncode.hpp"
+#include "FlightFix.hpp"
 
 #include <sstream>
 #include <string>
+#include <list>
+#include <utility>
+#include <vector>
 
 std::string GoogleEncode::encodeSignedNumber(int num) {
   int sgn_num = num << 1;
@@ -53,23 +57,21 @@ std::string GoogleEncode::encodeNumber(int num) {
 }
 
 std::auto_ptr<std::pair<std::string, std::string>>
-GoogleEncode::encode(std::vector<std::pair<double, double>> &points, std::vector<int> &levels) {
+GoogleEncode::encode(std::vector<FlightFix> &fixes, std::vector<int> &levels) {
   std::ostringstream encoded_levels,
                      encoded_points;
 
   int plat = 0,
       plng = 0;
 
-  size_t n_points = points.size();
+  size_t n_points = fixes.size();
 
   for (size_t i = 0; i < n_points; i++) {
     if (levels[i] != -1) {
       encoded_levels << encodeNumber(levels[i]);
 
-      std::pair<double, double> point = points[i];
-
-      int late5 = floor1e5(point.second);
-      int lnge5 = floor1e5(point.first);
+      int late5 = floor1e5(fixes[i].latitude);
+      int lnge5 = floor1e5(fixes[i].longitude);
 
       int dlat = late5 - plat;
       int dlng = lnge5 - plng;
