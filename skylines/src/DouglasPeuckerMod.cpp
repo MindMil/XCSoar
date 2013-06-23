@@ -135,31 +135,31 @@ double DouglasPeuckerMod::distance_dp(std::vector<double> &p0,
          u_denom = 0.0;
 
   if (p1 == p2) {
-    for (auto i = points.begin(); i != points.end(); i++) {
-      out += pow(p2[*i] - p0[*i], 2);
+    for (auto i : points) {
+      out += pow(p2[i] - p0[i], 2);
     }
   } else {
-    for (auto i = points.begin(); i != points.end(); i++) {
-      u_nom += (p0[*i] - p1[*i]) * (p2[*i] - p1[*i]);
+    for (auto i : points) {
+      u_nom += (p0[i] - p1[i]) * (p2[i] - p1[i]);
     }
 
-    for (auto i = points.begin(); i != points.end(); i++) {
-      u_denom += pow(p2[*i] - p1[*i], 2);
+    for (auto i : points) {
+      u_denom += pow(p2[i] - p1[i], 2);
     }
 
     u = u_nom / u_denom;
 
     if (u <= 0) {
-      for (auto i = points.begin(); i != points.end(); i++) {
-        out += pow(p0[*i] - p1[*i], 2);
+      for (auto i : points) {
+        out += pow(p0[i] - p1[i], 2);
       }
     } else if (u >= 1) {
-      for (auto i = points.begin(); i != points.end(); i++) {
-        out += pow(p0[*i] - p2[*i], 2);
+      for (auto i : points) {
+        out += pow(p0[i] - p2[i], 2);
       }
     } else if (0 < u && u < 1) {
-      for (auto i = points.begin(); i != points.end(); i++) {
-        out += pow(p0[*i] - p1[*i] - u * (p2[*i] - p1[*i]), 2);
+      for (auto i : points) {
+        out += pow(p0[i] - p1[i] - u * (p2[i] - p1[i]), 2);
       }
     }
   }
@@ -173,8 +173,8 @@ double DouglasPeuckerMod::distance_simple(std::vector<double> &p0,
                                           std::list<size_t> &points) {
   double out = 0.0;
 
-  for (auto i = points.begin(); i != points.end(); i++) {
-    out += sqrt(abs(p1[*i] - p0[*i])) + sqrt(abs(p2[*i] - p0[*i]));
+  for (auto i : points) {
+    out += sqrt(abs(p1[i] - p0[i])) + sqrt(abs(p2[i] - p0[i]));
   }
 
   out = pow(out, 2)/4;
