@@ -68,7 +68,8 @@ GoogleEncode::encode(std::vector<FlightFix>::iterator fix_start,
   int plat = 0,
       plng = 0;
 
-  for (auto fix = fix_start, level = levels_start;
+  auto level = levels_start;
+  for (auto fix = fix_start;
        fix != fix_end, level != levels_end;
        ++fix, ++level) {
     if (*level != -1) {
