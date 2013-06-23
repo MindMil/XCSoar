@@ -4,6 +4,7 @@
 #include "FlightFix.hpp"
 #include "FlightTimes.hpp"
 #include "AnalyseFlight.hpp"
+#include "GoogleEncode.hpp"
 
 #include "DebugReplayIGC.hpp"
 #include "DebugReplayVector.hpp"
@@ -62,6 +63,12 @@ public:
     if (keep_flight) return DebugReplayVector::Create(*fixes);
     else return DebugReplayIGC::Create(flight_file);
   };
+
+  /* Return flight as google encoded string */
+  GoogleEncode::EncodedFlight GoogleEncoded(
+    const BrokenDateTime start, const BrokenDateTime end,
+    const unsigned num_levels, const unsigned zoom_factor,
+    const double threshold, const bool force_endpoints);
 };
 
 #endif /* SKYLINES_FLIGHT_H */
