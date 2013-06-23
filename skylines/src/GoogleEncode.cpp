@@ -57,7 +57,7 @@ std::string GoogleEncode::encodeNumber(int num) {
   return encoded_string.str();
 }
 
-std::unique_ptr<std::pair<std::string, std::string>>
+GoogleEncode::EncodedFlight
 GoogleEncode::encode(std::vector<FlightFix> &fixes, std::vector<int> &levels) {
   std::ostringstream encoded_levels,
                      encoded_points;

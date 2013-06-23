@@ -35,6 +35,9 @@
 struct FlightFix;
 
 class GoogleEncode {
+public:
+  typedef std::unique_ptr<std::pair<std::string, std::string>> EncodedFlight;
+
 private:
   inline int floor1e5(double coordinate) {
     return floor(coordinate * 1e5);
@@ -45,8 +48,7 @@ private:
   std::string encodeNumber(int num);
     
 public:
-  std::unique_ptr<std::pair<std::string, std::string>>
-  encode(std::vector<FlightFix> &fixes, std::vector<int> &levels);
+  EncodedFlight encode(std::vector<FlightFix> &fixes, std::vector<int> &levels);
 
   std::string encodeList(std::list<int> &points);
 };
