@@ -58,21 +58,24 @@ std::string GoogleEncode::encodeNumber(int num) {
 }
 
 GoogleEncode::EncodedFlight
-GoogleEncode::encode(std::vector<FlightFix> &fixes, std::vector<int> &levels) {
+GoogleEncode::encode(std::vector<FlightFix>::iterator &fix_start,
+                     std::vector<FlightFix>::iterstor &fix_end,
+                     std::vector<int>::iterator &levels_start,
+                     std::vector<int>::iterator &levels_end) {
   std::ostringstream encoded_levels,
                      encoded_points;
 
   int plat = 0,
       plng = 0;
 
-  size_t n_points = fixes.size();
+  for (auto fix = fix_start, level = levels_start;
+       fix != fix_end, level != levels_end;
+       ++fix, ++level) {
+    if (*level != -1) {
+      encoded_levels << encodeNumber(*level);
 
-  for (size_t i = 0; i < n_points; i++) {
-    if (levels[i] != -1) {
-      encoded_levels << encodeNumber(levels[i]);
-
-      int late5 = floor1e5(fixes[i].latitude);
-      int lnge5 = floor1e5(fixes[i].longitude);
+      int late5 = floor1e5(fix->latitude);
+      int lnge5 = floor1e5(fix->longitude);
 
       int dlat = late5 - plat;
       int dlng = lnge5 - plng;
