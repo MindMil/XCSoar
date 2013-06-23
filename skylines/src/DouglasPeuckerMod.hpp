@@ -29,6 +29,8 @@
 #include <list>
 #include <memory>
 
+struct FlightFix;
+
 class DouglasPeuckerMod {
 private:
   const unsigned num_levels;
@@ -45,7 +47,7 @@ public:
 
   ~DouglasPeuckerMod();
 
-  std::vector<int> dpEncode(std::vector<std::vector<double>> &points, char *type);
+  std::vector<int> dpEncode(std::vector<FlightFix> &fixes);
 
   unsigned getNumLevels() {
     return num_levels;
@@ -56,15 +58,13 @@ public:
   }
 
 private:
-  double distance_dp(std::vector<double> &p0,
-                     std::vector<double> &p1,
-                     std::vector<double> &p2,
-                     std::list<size_t> &points);
+  double distance_dp(FlightFix &p0,
+                     FlightFix &p1,
+                     FlightFix &p2);
 
-  double distance_simple(std::vector<double> &p0,
-                         std::vector<double> &p1,
-                         std::vector<double> &p2,
-                         std::list<size_t> &points);
+  double distance_simple(FlightFix &p0,
+                         FlightFix &p1,
+                         FlightFix &p2);
 
   unsigned computeLevel(const double abs_max_dist);
 

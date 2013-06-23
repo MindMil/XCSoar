@@ -23,6 +23,7 @@
 */
 
 #include "DouglasPeuckerMod.hpp"
+#include "FlightFix.hpp"
 
 #include <stack>
 #include <vector>
@@ -47,13 +48,13 @@ DouglasPeuckerMod::~DouglasPeuckerMod() {
   delete[] zoom_level_breaks;
 }
 
-std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<std::vector<double>> &points, char *type) {
+std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<FlightFix> &fixes) {
   unsigned i,
            max_loc = 0;
   std::stack<std::pair<unsigned, unsigned>> stack;
 
-  double *dists = new double[points.size()];
-  std::fill(&dists[0], &dists[points.size()], 0.0);
+  double *dists = new double[fixes.size()];
+  std::fill(&dists[0], &dists[fixes.size()], 0.0);
 
   double temp,
          max_dist,
@@ -62,26 +63,13 @@ std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<std::vector<double>> &p
          threshold_squared = pow(threshold, 2);
 
   /**
-   * use normal douglas peucker distance (perpendicular to segment)
-   * or use simple distance calculation from adjacent points
+   * use normal douglas peucker distance (perpendicular to segment) for lon/lat
+   * and use simple distance calculation for time
    */
-  std::list<size_t> points_dp, points_simple;
-
-  for (i = 0; i < sizeof(type) / sizeof(type[0]); i++) {
-    if (type[i] == 'd')
-      points_simple.push_back(i);
-    else if (type[i] == 'p')
-      points_dp.push_back(i);
-    else
-      break;
-  }
-
-  for (i; i < points[0].size(); i++)
-    points_dp.push_back(i);
 
   // simplify using Douglas-Peucker
-  if (points.size() > 2) {
-    stack.push(std::pair<unsigned, unsigned>(0, (points.size() - 1)));
+  if (fixes.size() > 2) {
+    stack.push(std::pair<unsigned, unsigned>(0, (fixes.size() - 1)));
 
     while (stack.size() > 0) {
       std::pair<unsigned, unsigned> current = stack.top();
@@ -89,10 +77,8 @@ std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<std::vector<double>> &p
       max_dist = 0;
 
       for (unsigned i = current.first + 1; i < current.second; i++) {
-        temp = std::max(distance_dp(points[i], points[current.first],
-                                    points[current.second], points_dp),
-                        distance_simple(points[i], points[current.first],
-                                        points[current.second], points_simple));
+        temp = std::max(distance_dp(fixes[i], fixes[current.first], fixes[current.second]),
+                        distance_simple(fixes[i], fixes[current.first], fixes[current.second]));
 
         if (temp > max_dist) {
           max_dist = temp;
@@ -114,7 +100,7 @@ std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<std::vector<double>> &p
 
   abs_max_dist = sqrt(abs_max_dist_squared);
 
-  std::vector<int> r = classify(points.size(), dists, abs_max_dist);
+  std::vector<int> r = classify(fixes.size(), dists, abs_max_dist);
 
   delete[] dists;
   return r;
@@ -125,57 +111,46 @@ std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<std::vector<double>> &p
  * segment [p1,p2]. This could probably be replaced with something that is a
  * bit more numerically stable.
  */
-double DouglasPeuckerMod::distance_dp(std::vector<double> &p0,
-                                      std::vector<double> &p1,
-                                      std::vector<double> &p2,
-                                      std::list<size_t> &points) {
+double DouglasPeuckerMod::distance_dp(FlightFix &p0,
+                                      FlightFix &p1,
+                                      FlightFix &p2) {
   double u,
          out = 0.0,
          u_nom = 0.0,
          u_denom = 0.0;
 
   if (p1 == p2) {
-    for (auto i : points) {
-      out += pow(p2[i] - p0[i], 2);
-    }
+    out += pow(p2.longitude - p0.longitude, 2);
+    out += pow(p2.latitude - p0.latitude, 2);
   } else {
-    for (auto i : points) {
-      u_nom += (p0[i] - p1[i]) * (p2[i] - p1[i]);
-    }
+    u_nom += (p0.longitude - p1.longitude) * (p2.longitude - p1.longitude);
+    u_nom += (p0.latitude - p1.latitude) * (p2.latitude - p1.latitude);
 
-    for (auto i : points) {
-      u_denom += pow(p2[i] - p1[i], 2);
-    }
+    u_denom += pow(p2.longitude - p1.longitude, 2);
+    u_denom += pow(p2.latitude - p1.latitude, 2);
 
     u = u_nom / u_denom;
 
     if (u <= 0) {
-      for (auto i : points) {
-        out += pow(p0[i] - p1[i], 2);
-      }
+      out += pow(p0.longitude - p1.longitude, 2);
+      out += pow(p0.latitude - p1.latitude, 2);
     } else if (u >= 1) {
-      for (auto i : points) {
-        out += pow(p0[i] - p2[i], 2);
-      }
+      out += pow(p0.longitude - p2.longitude, 2);
+      out += pow(p0.latitude - p2.latitude, 2);
     } else if (0 < u && u < 1) {
-      for (auto i : points) {
-        out += pow(p0[i] - p1[i] - u * (p2[i] - p1[i]), 2);
-      }
+      out += pow(p0.longitude - p1.longitude - u * (p2.longitude - p1.longitude), 2);
+      out += pow(p0.latitude - p1.latitude - u * (p2.latitude - p1.latitude), 2);
     }
   }
 
   return out;
 }
 
-double DouglasPeuckerMod::distance_simple(std::vector<double> &p0,
-                                          std::vector<double> &p1,
-                                          std::vector<double> &p2,
-                                          std::list<size_t> &points) {
-  double out = 0.0;
-
-  for (auto i : points) {
-    out += sqrt(abs(p1[i] - p0[i])) + sqrt(abs(p2[i] - p0[i]));
-  }
+double DouglasPeuckerMod::distance_simple(FlightFix &p0,
+                                          FlightFix &p1,
+                                          FlightFix &p2) {
+  double out = sqrt(abs(p1.time - p0.time)) +
+               sqrt(abs(p2.time - p0.time));
 
   out = pow(out, 2)/4;
 
