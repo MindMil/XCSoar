@@ -48,12 +48,14 @@ DouglasPeuckerMod::~DouglasPeuckerMod() {
   delete[] zoom_level_breaks;
 }
 
-std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<FlightFix> &fixes) {
+std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<FlightFix> &fixes,
+                                             const unsigned start, const unsigned end) {
   unsigned max_loc = 0;
   std::stack<std::pair<unsigned, unsigned>> stack;
+  const unsigned fixes_size = end - start;
 
-  double *dists = new double[fixes.size()];
-  std::fill(&dists[0], &dists[fixes.size()], 0.0);
+  double *dists = new double[fixes_size];
+  std::fill(&dists[0], &dists[fixes_size], 0.0);
 
   double temp,
          max_dist,
@@ -67,8 +69,8 @@ std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<FlightFix> &fixes) {
    */
 
   // simplify using Douglas-Peucker
-  if (fixes.size() > 2) {
-    stack.push(std::pair<unsigned, unsigned>(0, (fixes.size() - 1)));
+  if (fixes_size > 2) {
+    stack.push(std::pair<unsigned, unsigned>(start, end - 1));
 
     while (stack.size() > 0) {
       std::pair<unsigned, unsigned> current = stack.top();
@@ -90,7 +92,7 @@ std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<FlightFix> &fixes) {
       }
 
       if (max_dist > threshold_squared) {
-        dists[max_loc] = sqrt(max_dist);
+        dists[max_loc - start] = sqrt(max_dist);
         stack.push(std::pair<unsigned, unsigned>(current.first, max_loc));
         stack.push(std::pair<unsigned, unsigned>(max_loc, current.second));
       }
@@ -99,7 +101,7 @@ std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<FlightFix> &fixes) {
 
   abs_max_dist = sqrt(abs_max_dist_squared);
 
-  std::vector<int> r = classify(fixes.size(), dists, abs_max_dist);
+  std::vector<int> r = classify(fixes_size, dists, abs_max_dist);
 
   delete[] dists;
   return r;

@@ -47,7 +47,8 @@ public:
 
   ~DouglasPeuckerMod();
 
-  std::vector<int> dpEncode(std::vector<FlightFix> &fixes);
+  std::vector<int> dpEncode(std::vector<FlightFix> &fixes,
+                            const unsigned start, const unsigned end);
 
   unsigned getNumLevels() {
     return num_levels;
