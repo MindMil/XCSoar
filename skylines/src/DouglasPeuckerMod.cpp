@@ -49,8 +49,7 @@ DouglasPeuckerMod::~DouglasPeuckerMod() {
 }
 
 std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<FlightFix> &fixes) {
-  unsigned i,
-           max_loc = 0;
+  unsigned max_loc = 0;
   std::stack<std::pair<unsigned, unsigned>> stack;
 
   double *dists = new double[fixes.size()];
@@ -119,7 +118,8 @@ double DouglasPeuckerMod::distance_dp(FlightFix &p0,
          u_nom = 0.0,
          u_denom = 0.0;
 
-  if (p1 == p2) {
+  if (p1.longitude == p2.longitude &&
+      p1.latitude == p2.latitude) {
     out += pow(p2.longitude - p0.longitude, 2);
     out += pow(p2.latitude - p0.latitude, 2);
   } else {
@@ -163,9 +163,9 @@ std::vector<int> DouglasPeuckerMod::classify(size_t n_points,
   std::vector<int> r;
 
   if (force_endpoints) {
-    r.push_back(numLevels - 1);
+    r.push_back(num_levels - 1);
   } else {
-    r.push_back(numLevels - computeLevel(abs_max_dist) - 1);
+    r.push_back(num_levels - computeLevel(abs_max_dist) - 1);
   }
 
   if (n_points > 1) {
@@ -177,9 +177,9 @@ std::vector<int> DouglasPeuckerMod::classify(size_t n_points,
     }
 
     if (force_endpoints) {
-      r.push_back(numLevels - 1);
+      r.push_back(num_levels - 1);
     } else {
-      r.push_back(numLevels - computeLevel(abs_max_dist) - 1);
+      r.push_back(num_levels - computeLevel(abs_max_dist) - 1);
     }
   }
 
