@@ -31,27 +31,27 @@
 
 class DouglasPeuckerMod {
 private:
-  int num_levels;
-  int zoom_factor;
-  double threshold;
-  bool force_endpoints;
+  const unsigned num_levels;
+  const unsigned zoom_factor;
+  const double threshold;
+  const bool force_endpoints;
   double *zoom_level_breaks;
 
 public:
-  DouglasPeuckerMod(int _num_levels = 18,
-                    int _zoom_factor = 2,
-                    double _threshold = 0.00001,
-                    bool _force_endpoints = true);
+  DouglasPeuckerMod(const unsigned _num_levels = 18,
+                    const unsigned _zoom_factor = 2,
+                    const double _threshold = 0.00001,
+                    const bool _force_endpoints = true);
 
   ~DouglasPeuckerMod();
 
   std::vector<int> dpEncode(std::vector<std::vector<double>> &points, char *type);
 
-  int getNumLevels() {
+  unsigned getNumLevels() {
     return num_levels;
   }
 
-  int getZoomFactor() {
+  unsigned getZoomFactor() {
     return zoom_factor;
   }
 
@@ -66,7 +66,7 @@ private:
                          std::vector<double> &p2,
                          std::list<size_t> &points);
 
-  int computeLevel(double abs_max_dist);
+  unsigned computeLevel(const double abs_max_dist);
 
   std::vector<int> classify(size_t n_points, const double dists[], double abs_max_dist);
 };

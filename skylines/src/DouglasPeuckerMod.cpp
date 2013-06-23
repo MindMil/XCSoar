@@ -30,16 +30,16 @@
 #include <utility>
 #include <algorithm>
 
-DouglasPeuckerMod::DouglasPeuckerMod(int _num_levels,
-                                     int _zoom_factor,
-                                     double _threshold,
-                                     bool _force_endpoints)
+DouglasPeuckerMod::DouglasPeuckerMod(const unsigned _num_levels,
+                                     const unsigned _zoom_factor,
+                                     const double _threshold,
+                                     const bool _force_endpoints)
   : num_levels(_num_levels), zoom_factor(_zoom_factor),
     threshold(_threshold), force_endpoints(_force_endpoints) {
   zoom_level_breaks = new double[num_levels];
 
-  for (int i = 0; i < num_levels; i++) {
-    zoom_level_breaks[i] = threshold * pow(double(zoom_factor), num_levels - i - 1);
+  for (unsigned i = 0; i < num_levels; i++) {
+    zoom_level_breaks[i] = threshold * pow(zoom_factor, num_levels - i - 1);
   }
 }
 
@@ -50,10 +50,10 @@ DouglasPeuckerMod::~DouglasPeuckerMod() {
 std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<std::vector<double>> &points, char *type) {
   unsigned i,
            max_loc = 0;
-  std::stack<std::pair<int, int>> stack;
+  std::stack<std::pair<unsigned, unsigned>> stack;
 
   double *dists = new double[points.size()];
-  fill(&dists[0], &dists[points.size()], 0.0);
+  std::fill(&dists[0], &dists[points.size()], 0.0);
 
   double temp,
          max_dist,
@@ -84,11 +84,11 @@ std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<std::vector<double>> &p
     stack.push(std::pair<unsigned, unsigned>(0, (points.size() - 1)));
 
     while (stack.size() > 0) {
-      std::pair<int, int> current = stack.top();
+      std::pair<unsigned, unsigned> current = stack.top();
       stack.pop();
       max_dist = 0;
 
-      for (int i = current.first + 1; i < current.second; i++) {
+      for (unsigned i = current.first + 1; i < current.second; i++) {
         temp = std::max(distance_dp(points[i], points[current.first],
                                     points[current.second], points_dp),
                         distance_simple(points[i], points[current.first],
@@ -106,8 +106,8 @@ std::vector<int> DouglasPeuckerMod::dpEncode(std::vector<std::vector<double>> &p
 
       if (max_dist > threshold_squared) {
         dists[max_loc] = sqrt(max_dist);
-        stack.push(std::pair<int, int>(current.first, max_loc));
-        stack.push(std::pair<int, int>(max_loc, current.second));
+        stack.push(std::pair<unsigned, unsigned>(current.first, max_loc));
+        stack.push(std::pair<unsigned, unsigned>(max_loc, current.second));
       }
     }
   }
@@ -217,8 +217,8 @@ std::vector<int> DouglasPeuckerMod::classify(size_t n_points,
  * terms of a logarithm, but this approach makes it a bit easier to ensure
  * that the level is not too large.
  */
-int DouglasPeuckerMod::computeLevel(double abs_max_dist) {
-  int lev = 0;
+unsigned DouglasPeuckerMod::computeLevel(const double abs_max_dist) {
+  unsigned lev = 0;
 
   if (abs_max_dist > threshold) {
     while (abs_max_dist < zoom_level_breaks[lev]) {
