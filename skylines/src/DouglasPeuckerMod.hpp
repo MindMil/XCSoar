@@ -37,13 +37,16 @@ private:
   const unsigned zoom_factor;
   const double threshold;
   const bool force_endpoints;
+  const unsigned max_delta_time;
+
   double *zoom_level_breaks;
 
 public:
   DouglasPeuckerMod(const unsigned _num_levels = 18,
                     const unsigned _zoom_factor = 2,
                     const double _threshold = 0.00001,
-                    const bool _force_endpoints = true);
+                    const bool _force_endpoints = true,
+                    const unsigned _max_delta_time = 60);
 
   ~DouglasPeuckerMod();
 

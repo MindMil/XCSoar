@@ -21,7 +21,8 @@ Flight::~Flight() {
 GoogleEncode::EncodedFlight Flight::GoogleEncoded(
   const BrokenDateTime start, const BrokenDateTime end,
   const unsigned num_levels, const unsigned zoom_factor,
-  const double threshold, const bool force_endpoints) {
+  const double threshold, const bool force_endpoints,
+  const unsigned max_delta_time) {
 
   // we need the whole flight, so read it now...
   if (!keep_flight) {
@@ -29,7 +30,7 @@ GoogleEncode::EncodedFlight Flight::GoogleEncoded(
     FlightReader(flight_file, *fixes);
   }
 
-  DouglasPeuckerMod dp(num_levels, zoom_factor, threshold, force_endpoints);
+  DouglasPeuckerMod dp(num_levels, zoom_factor, threshold, force_endpoints, max_delta_time);
 
   unsigned start_index = 0,
            end_index = 0;

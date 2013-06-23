@@ -68,7 +68,8 @@ public:
   GoogleEncode::EncodedFlight GoogleEncoded(
     const BrokenDateTime start, const BrokenDateTime end,
     const unsigned num_levels, const unsigned zoom_factor,
-    const double threshold, const bool force_endpoints);
+    const double threshold, const bool force_endpoints,
+    const unsigned max_delta_time);
 };
 
 #endif /* SKYLINES_FLIGHT_H */

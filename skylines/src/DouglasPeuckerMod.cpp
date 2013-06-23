@@ -34,9 +34,11 @@
 DouglasPeuckerMod::DouglasPeuckerMod(const unsigned _num_levels,
                                      const unsigned _zoom_factor,
                                      const double _threshold,
-                                     const bool _force_endpoints)
+                                     const bool _force_endpoints,
+                                     const unsigned _max_delta_time)
   : num_levels(_num_levels), zoom_factor(_zoom_factor),
-    threshold(_threshold), force_endpoints(_force_endpoints) {
+    threshold(_threshold), force_endpoints(_force_endpoints),
+    max_delta_time(_max_delta_time) {
   zoom_level_breaks = new double[num_levels];
 
   for (unsigned i = 0; i < num_levels; i++) {
@@ -151,8 +153,8 @@ double DouglasPeuckerMod::distance_dp(FlightFix &p0,
 double DouglasPeuckerMod::distance_simple(FlightFix &p0,
                                           FlightFix &p1,
                                           FlightFix &p2) {
-  double out = sqrt(abs(p1.time - p0.time)) +
-               sqrt(abs(p2.time - p0.time));
+  double out = sqrt(abs(p1.time - p0.time) / max_delta_time * threshold) +
+               sqrt(abs(p2.time - p0.time) / max_delta_time * threshold);
 
   out = pow(out, 2)/4;
 
