@@ -55,8 +55,8 @@ PyObject* Python::WriteLonLat(const GeoPoint &location) {
 
   PyObject *py_lon = PyFloat_FromDouble(location.longitude.Degrees());
   PyObject *py_lat = PyFloat_FromDouble(location.latitude.Degrees());
-  PyDict_SetItemString(py_location, "lon", py_lon);
-  PyDict_SetItemString(py_location, "lat", py_lat);
+  PyDict_SetItemString(py_location, "longitude", py_lon);
+  PyDict_SetItemString(py_location, "latitude", py_lat);
   Py_DECREF(py_lon);
   Py_DECREF(py_lat);
 
@@ -75,7 +75,7 @@ PyObject* Python::WriteEvent(const BrokenDateTime &datetime,
 
   if (location.IsValid()) {
     PyObject *py_location = WriteLonLat(location);
-    PyDict_SetItemString(py_event, "location", py_location);
+    PyDict_Merge(py_event, py_location, true);
     Py_DECREF(py_location);
   }
 
