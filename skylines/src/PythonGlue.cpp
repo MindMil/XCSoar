@@ -82,14 +82,19 @@ PyObject* XCSoarTools_Path(PyXCSoarTools *self, PyObject *args) {
 
   DebugReplay *replay = self->flight->Replay();
   while (replay->Next()) {
-    const int64_t date_time_utc = replay->Basic().date_time_utc.ToUnixTimeUTC();
+    const MoreData &basic = replay->Basic();
+    const int64_t date_time_utc = basic.date_time_utc.ToUnixTimeUTC();
 
     if (date_time_utc < begin)
       continue;
     else if (date_time_utc > end)
       break;
 
-    const FlightFix fix(replay->Basic());
+    if (!basic.time_available || !basic.location_available ||
+        !basic.NavAltitudeAvailable())
+      continue;
+
+    const FlightFix fix(basic);
 
     PyObject *py_fix_datetime = PyInt_FromLong(fix.datetime);
     PyObject *py_fix_time = PyFloat_FromDouble(fix.time);
