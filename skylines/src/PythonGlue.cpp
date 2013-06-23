@@ -154,43 +154,25 @@ PyObject* XCSoarTools_Times(PyXCSoarTools *self) {
   for (auto times : results) {
     PyObject *py_single_flight = PyDict_New();
 
-    PyObject *py_takeoff_longitude =
-      PyFloat_FromDouble(times.takeoff_location.longitude.Degrees());
-    PyObject *py_takeoff_latitude =
-      PyFloat_FromDouble(times.takeoff_location.latitude.Degrees());
-    PyObject *py_takeoff_datetime = Python::BrokenDateTimeToPy(times.takeoff_time);
+    PyObject *py_takeoff = Python::WriteEvent(
+      times.takeoff_time,
+      times.takeoff_location);
 
-    PyObject *py_release_longitude =
-      PyFloat_FromDouble(times.release_location.longitude.Degrees());
-    PyObject *py_release_latitude =
-      PyFloat_FromDouble(times.release_location.latitude.Degrees());
-    PyObject *py_release_datetime = Python::BrokenDateTimeToPy(times.release_time);
+    PyObject *py_release = Python::WriteEvent(
+      times.release_time,
+      times.release_location);
 
-    PyObject *py_landing_longitude =
-      PyFloat_FromDouble(times.landing_location.longitude.Degrees());
-    PyObject *py_landing_latitude =
-      PyFloat_FromDouble(times.landing_location.latitude.Degrees());
-    PyObject *py_landing_datetime = Python::BrokenDateTimeToPy(times.landing_time);
+    PyObject *py_landing = Python::WriteEvent(
+      times.landing_time,
+      times.landing_location);
 
-    PyDict_SetItemString(py_single_flight, "takeoff_lon", py_takeoff_longitude);
-    PyDict_SetItemString(py_single_flight, "takeoff_lat", py_takeoff_latitude);
-    PyDict_SetItemString(py_single_flight, "takeoff_time", py_takeoff_datetime);
-    PyDict_SetItemString(py_single_flight, "release_lon", py_release_longitude);
-    PyDict_SetItemString(py_single_flight, "release_lat", py_release_latitude);
-    PyDict_SetItemString(py_single_flight, "release_time", py_release_datetime);
-    PyDict_SetItemString(py_single_flight, "landing_lon", py_landing_longitude);
-    PyDict_SetItemString(py_single_flight, "landing_lat", py_landing_latitude);
-    PyDict_SetItemString(py_single_flight, "landing_time", py_landing_datetime);
+    PyDict_SetItemString(py_single_flight, "takeoff", py_takeoff);
+    PyDict_SetItemString(py_single_flight, "release", py_release);
+    PyDict_SetItemString(py_single_flight, "landing", py_landing);
 
-    Py_DECREF(py_takeoff_longitude);
-    Py_DECREF(py_takeoff_latitude);
-    Py_DECREF(py_takeoff_datetime);
-    Py_DECREF(py_release_longitude);
-    Py_DECREF(py_release_latitude);
-    Py_DECREF(py_release_datetime);
-    Py_DECREF(py_landing_longitude);
-    Py_DECREF(py_landing_latitude);
-    Py_DECREF(py_landing_datetime);
+    Py_DECREF(py_takeoff);
+    Py_DECREF(py_release);
+    Py_DECREF(py_landing);
 
     if (PyList_Append(py_times, py_single_flight))
       return NULL;

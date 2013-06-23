@@ -45,16 +45,20 @@ times = calc_times(tools)
 print "Found {} flight(s)".format(len(times))
 
 for dtime in times:
-  print
-  print "Takeoff: {}, location {} {}".format(dtime['takeoff_time'], dtime['takeoff_lon'], dtime['takeoff_lat'])
-  print "Release: {}, location {} {}".format(dtime['release_time'], dtime['release_lon'], dtime['release_lat'])
-  print "Landing: {}, location {} {}".format(dtime['landing_time'], dtime['landing_lon'], dtime['landing_lat'])
+  takeoff = dtime['takeoff']
+  release = dtime['release']
+  landing = dtime['landing']
 
-  fixes = tools.Path(dtime['takeoff_time'], dtime['release_time'])
+  print
+  print "Takeoff: {}, location {} {}".format(takeoff['time'], takeoff['longitude'], takeoff['latitude'])
+  print "Release: {}, location {} {}".format(release['time'], release['longitude'], release['latitude'])
+  print "Landing: {}, location {} {}".format(landing['time'], landing['longitude'], landing['latitude'])
+
+  fixes = tools.Path(takeoff['time'], release['time'])
   for fix in fixes:
     print fix
 
-  pprint(calc_analyse(tools, dtime['takeoff_time'], dtime['release_time'], dtime['landing_time'], \
+  pprint(calc_analyse(tools, takeoff['time'], release['time'], landing['time'], \
          1024, 1024, 64))
 
 del tools
