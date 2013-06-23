@@ -220,6 +220,9 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
 
   PyObject *py_result = PyDict_New();
 
+  /* write contests */
+  PyObject *py_contests = PyDict_New();
+
   /* write olc_plus statistics */
   PyObject *py_olc_plus = PyDict_New();
 
@@ -235,7 +238,7 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
   Py_DECREF(py_triangle);
   Py_DECREF(py_plus);
 
-  PyDict_SetItemString(py_result, "olc_plus", py_olc_plus);
+  PyDict_SetItemString(py_contests, "olc_plus", py_olc_plus);
   Py_DECREF(py_olc_plus);
 
   /* write dmst statistics */
@@ -245,8 +248,11 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
   PyDict_SetItemString(py_dmst, "quadrilateral", py_quadrilateral);
   Py_DECREF(py_quadrilateral);
 
-  PyDict_SetItemString(py_result, "dmst", py_dmst);
+  PyDict_SetItemString(py_contests, "dmst", py_dmst);
   Py_DECREF(py_dmst);
+
+  PyDict_SetItemString(py_result, "contests", py_contests);
+  Py_DECREF(py_contests);
 
   /* write fligh phases */
   PyObject *py_phases = PyList_New(0);
