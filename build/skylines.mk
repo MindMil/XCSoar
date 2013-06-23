@@ -108,6 +108,8 @@ SKYLINES_PYTHON_SOURCES = \
         $(SKYLINES_SRC)/FlightTimes.cpp \
         $(SKYLINES_SRC)/DebugReplayVector.cpp \
 	$(SKYLINES_SRC)/AnalyseFlight.cpp \
+	$(SKYLINES_SRC)/GoogleEncode.cpp \
+	$(SKYLINES_SRC)/DouglasPeuckerMod.cpp \
 	$(SKYLINES_SRC)/PythonGlue.cpp \
 	$(SKYLINES_SRC)/PythonConverters.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
