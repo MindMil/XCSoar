@@ -58,10 +58,10 @@ std::string GoogleEncode::encodeNumber(int num) {
 }
 
 GoogleEncode::EncodedFlight
-GoogleEncode::encode(std::vector<FlightFix>::iterator &fix_start,
-                     std::vector<FlightFix>::iterstor &fix_end,
-                     std::vector<int>::iterator &levels_start,
-                     std::vector<int>::iterator &levels_end) {
+GoogleEncode::encode(std::vector<FlightFix>::iterator fix_start,
+                     std::vector<FlightFix>::iterator fix_end,
+                     std::vector<int>::iterator levels_start,
+                     std::vector<int>::iterator levels_end) {
   std::ostringstream encoded_levels,
                      encoded_points;
 

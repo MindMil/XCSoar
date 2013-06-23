@@ -48,10 +48,10 @@ private:
   static std::string encodeNumber(int num);
     
 public:
-  static EncodedFlight encode(std::vector<FlightFix>::iterator &fix_start,
-                              std::vector<FlightFix>::iterstor &fix_end,
-                              std::vector<int>::iterator &levels_start,
-                              std::vector<int>::iterator &levels_end);
+  static EncodedFlight encode(std::vector<FlightFix>::iterator fix_start,
+                              std::vector<FlightFix>::iterator fix_end,
+                              std::vector<int>::iterator levels_start,
+                              std::vector<int>::iterator levels_end);
 
   static std::string encodeList(std::list<int> &points);
 };
