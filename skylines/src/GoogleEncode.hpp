@@ -39,21 +39,21 @@ public:
   typedef std::unique_ptr<std::pair<std::string, std::string>> EncodedFlight;
 
 private:
-  inline int floor1e5(double coordinate) {
+  static inline int floor1e5(double coordinate) {
     return floor(coordinate * 1e5);
   }
 
-  std::string encodeSignedNumber(int num);
+  static std::string encodeSignedNumber(int num);
 
-  std::string encodeNumber(int num);
+  static std::string encodeNumber(int num);
     
 public:
-  EncodedFlight encode(std::vector<FlightFix>::iterator &fix_start,
-                       std::vector<FlightFix>::iterstor &fix_end,
-                       std::vector<int>::iterator &levels_start,
-                       std::vector<int>::iterator &levels_end);
+  static EncodedFlight encode(std::vector<FlightFix>::iterator &fix_start,
+                              std::vector<FlightFix>::iterstor &fix_end,
+                              std::vector<int>::iterator &levels_start,
+                              std::vector<int>::iterator &levels_end);
 
-  std::string encodeList(std::list<int> &points);
+  static std::string encodeList(std::list<int> &points);
 };
 
 #endif /* SKYLINES_GOOGLEENCODE_H */
