@@ -36,7 +36,13 @@ struct FlightFix;
 
 class GoogleEncode {
 public:
-  typedef std::unique_ptr<std::pair<std::string, std::string>> EncodedFlight;
+  struct EncodedFlight {
+    std::unique_ptr<std::string> locations;
+    std::unique_ptr<std::string> levels;
+    std::unique_ptr<std::string> times;
+    std::unique_ptr<std::string> gps_alt;
+    std::unique_ptr<std::string> enl;
+  };
 
 private:
   static inline int floor1e5(double coordinate) {

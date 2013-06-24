@@ -63,7 +63,10 @@ GoogleEncode::encode(std::vector<FlightFix>::iterator fix_start,
                      std::vector<int>::iterator levels_start,
                      std::vector<int>::iterator levels_end) {
   std::ostringstream encoded_levels,
-                     encoded_points;
+                     encoded_points,
+                     encoded_time,
+                     encoded_gps_alt,
+                     encoded_enl;
 
   int plat = 0,
       plng = 0;
@@ -86,14 +89,21 @@ GoogleEncode::encode(std::vector<FlightFix>::iterator fix_start,
 
       encoded_points << encodeSignedNumber(dlat);
       encoded_points << encodeSignedNumber(dlng);
+
+      encoded_time << encodeSignedNumber(int(fix->time));
+      encoded_gps_alt << encodeSignedNumber(int(fix->gps_altitude));
+      encoded_enl << encodeSignedNumber(int(fix->engine_noise_level));
     }
   }
-    
-  std::unique_ptr<std::pair<std::string, std::string>> r(new std::pair<std::string, std::string>);
-  r->first = encoded_points.str();
-  r->second = encoded_levels.str();
 
-  return r;
+  EncodedFlight flight;
+  flight.locations = std::unique_ptr<std::string>(new std::string(encoded_points.str()));
+  flight.levels = std::unique_ptr<std::string>(new std::string(encoded_levels.str()));
+  flight.times = std::unique_ptr<std::string>(new std::string(encoded_time.str()));
+  flight.gps_alt = std::unique_ptr<std::string>(new std::string(encoded_gps_alt.str()));
+  flight.enl = std::unique_ptr<std::string>(new std::string(encoded_enl.str()));
+
+  return flight;
 }
 
 std::string GoogleEncode::encodeList(std::list<int> &points) {

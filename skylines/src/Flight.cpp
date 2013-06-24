@@ -53,14 +53,15 @@ GoogleEncode::EncodedFlight Flight::GoogleEncoded(
 
   std::vector<int> levels = dp.dpEncode(*fixes, start_index, end_index);
 
-  GoogleEncode::EncodedFlight encoded =
-    GoogleEncode::encode(fixes->begin() + start_index,
-                         fixes->begin() + end_index,
-                         levels.begin(),
-                         levels.end());
+  GoogleEncode::EncodedFlight encoded_flight;
+  encoded_flight = GoogleEncode::encode(
+    fixes->begin() + start_index,
+    fixes->begin() + end_index,
+    levels.begin(),
+    levels.end());
 
   if (!keep_flight)
     delete fixes;
 
-  return encoded;
+  return encoded_flight;
 }
