@@ -26,42 +26,38 @@
 #include <Python.h>
 #include "Flight.hpp"
 
-struct PyXCSoarTools {
+/* XCSoarTools.Flight methods */
+struct PyXCSoarTools_Flight {
   PyObject_HEAD Flight *flight;
 };
 
-static PyXCSoarTools* XCSoarTools_init(PyXCSoarTools *self, PyObject *args, PyObject *kwargs);
-static void XCSoarTools_dealloc(PyXCSoarTools *self);
+static PyXCSoarTools_Flight* XCSoarTools_Flight_init(PyXCSoarTools_Flight *self, PyObject *args, PyObject *kwargs);
+static void XCSoarTools_Flight_dealloc(PyXCSoarTools_Flight *self);
 
-static PyObject* XCSoarTools_Path(PyXCSoarTools *self, PyObject *args);
-static PyObject* XCSoarTools_GoogleEncoded(PyXCSoarTools *self, PyObject *args);
-static PyObject* XCSoarTools_Times(PyXCSoarTools *self);
-static PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwargs);
- 
-static PyMethodDef XCSoarTools_methods[] = {
-  {"EncodeList", (PyCFunction)XCSoarTools_EncodeList, METH_VARARGS, "Encode a list of int."},
-  {NULL, NULL, 0, NULL}
-};
+static PyObject* XCSoarTools_Flight_Path(PyXCSoarTools_Flight *self, PyObject *args);
+static PyObject* XCSoarTools_Flight_GoogleEncoded(PyXCSoarTools_Flight *self, PyObject *args);
+static PyObject* XCSoarTools_Flight_Times(PyXCSoarTools_Flight *self);
+static PyObject* XCSoarTools_Flight_Analyse(PyXCSoarTools_Flight *self, PyObject *args, PyObject *kwargs);
 
 static PyMethodDef XCSoarTools_Flight_methods[] = {
-  {"Path", (PyCFunction)XCSoarTools_Path, METH_VARARGS, "Get flight as list."},
-  {"GoogleEncoded", (PyCFunction)XCSoarTools_GoogleEncoded, METH_VARARGS, "Get flight as google encoded string."},
-  {"Times", (PyCFunction)XCSoarTools_Times, METH_VARARGS, "Get takeoff/release/landing times from flight."},
-  {"Analyse", (PyCFunction)XCSoarTools_Analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
+  {"Path", (PyCFunction)XCSoarTools_Flight_Path, METH_VARARGS, "Get flight as list."},
+  {"GoogleEncoded", (PyCFunction)XCSoarTools_Flight_GoogleEncoded, METH_VARARGS, "Get flight as google encoded string."},
+  {"Times", (PyCFunction)XCSoarTools_Flight_Times, METH_VARARGS, "Get takeoff/release/landing times from flight."},
+  {"Analyse", (PyCFunction)XCSoarTools_Flight_Analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
   {NULL, NULL, 0, NULL}
 };
 
-static PyMemberDef XCSoarTools_members[] = {
+static PyMemberDef XCSoarTools_Flight_members[] = {
   {NULL}  /* Sentinel */
 };
 
-PyTypeObject XCSoarToolsType = {
+PyTypeObject XCSoarTools_Flight_Type = {
   PyObject_HEAD_INIT(&PyType_Type)
   0,                     /* obj_size */
   "XCSoarTools",         /* char *tp_name; */
-  sizeof(PyXCSoarTools), /* int tp_basicsize; */
+  sizeof(PyXCSoarTools_Flight), /* int tp_basicsize; */
   0,                     /* int tp_itemsize; not used much */
-  (destructor)XCSoarTools_dealloc, /* destructor tp_dealloc; */
+  (destructor)XCSoarTools_Flight_dealloc, /* destructor tp_dealloc; */
   0,                     /* printfunc  tp_print; */
   0,                     /* getattrfunc  tp_getattr; __getattr__ */
   0,                     /* setattrfunc  tp_setattr; __setattr__ */
@@ -77,7 +73,7 @@ PyTypeObject XCSoarToolsType = {
   0,                     /* tp_setattro */
   0,                     /* tp_as_buffer */
   Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /* tp_flags */
-  "XCSoarTools object",  /* tp_doc */
+  "XCSoarTools.Flight object",  /* tp_doc */
   0,		         /* tp_traverse */
   0,		         /* tp_clear */
   0,		         /* tp_richcompare */
@@ -85,14 +81,14 @@ PyTypeObject XCSoarToolsType = {
   0,		         /* tp_iter */
   0,		         /* tp_iternext */
   XCSoarTools_Flight_methods,   /* tp_methods */
-  XCSoarTools_members,   /* tp_members */
+  XCSoarTools_Flight_members,   /* tp_members */
   0,                     /* tp_getset */
   0,                     /* tp_base */
   0,                     /* tp_dict */
   0,                     /* tp_descr_get */
   0,                     /* tp_descr_set */
   0,                     /* tp_dictoffset */
-  (initproc)XCSoarTools_init, /* tp_init */
+  (initproc)XCSoarTools_Flight_init, /* tp_init */
   0,                     /* tp_alloc */
   PyType_GenericNew,     /* tp_new */
 /* this could be extended even further...
@@ -100,7 +96,13 @@ PyTypeObject XCSoarToolsType = {
    */
 };
 
+/* XCSoarTools methods */
 static PyObject* XCSoarTools_EncodeList(PyObject *self, PyObject *args);
+
+static PyMethodDef XCSoarTools_methods[] = {
+  {"EncodeList", (PyCFunction)XCSoarTools_EncodeList, METH_VARARGS, "Encode a list of int."},
+  {NULL, NULL, 0, NULL}
+};
 
 PyMODINIT_FUNC initXCSoarTools();
 
