@@ -106,7 +106,7 @@ GoogleEncode::encode(std::vector<FlightFix>::iterator fix_start,
   return flight;
 }
 
-std::string GoogleEncode::encodeList(std::list<int> &points) {
+std::unique_ptr<std::string> GoogleEncode::encodeList(std::vector<int> &points) {
   std::ostringstream encoded_list;
 
   int val = 0;
@@ -118,5 +118,5 @@ std::string GoogleEncode::encodeList(std::list<int> &points) {
     encoded_list << encodeSignedNumber(dval);
   }
 
-  return encoded_list.str();
+  return std::unique_ptr<std::string>(new std::string(encoded_list.str()));
 }

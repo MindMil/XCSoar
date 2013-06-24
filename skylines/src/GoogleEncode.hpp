@@ -59,7 +59,7 @@ public:
                               std::vector<int>::iterator levels_start,
                               std::vector<int>::iterator levels_end);
 
-  static std::string encodeList(std::list<int> &points);
+  static std::unique_ptr<std::string> encodeList(std::vector<int> &points);
 };
 
 #endif /* SKYLINES_GOOGLEENCODE_H */
