@@ -62,10 +62,12 @@ for dtime in times:
   for fix in fixes:
     print fix
 
-  pprint(calc_analyse(tools, takeoff['time'], release['time'], landing['time'], \
-         1024, 1024, 64))
+  calc_analyse(tools, takeoff['time'], release['time'], landing['time'], \
+         1024, 1024, 64)
 
   print calc_google(tools, takeoff['time'], landing['time'])
 
 del tools
+
+print XCSoarTools.EncodeList([0, 1, 2, 3, 4, 5])
 

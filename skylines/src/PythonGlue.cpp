@@ -332,6 +332,48 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
   return py_result;
 }
 
+PyObject* XCSoarTools_EncodeList(PyXCSoarTools *self, PyObject *args) {
+  PyObject *py_list;
+
+  if (!PyArg_ParseTuple(args, "O", &py_list)) {
+    printf("Cannot parse argument\n");
+    return NULL;
+  }
+
+  if (!PySequence_Check(py_list)) {
+    printf("Not a list");
+    return NULL;
+  }
+
+  Py_ssize_t num_items = PySequence_Fast_GET_SIZE(py_list);
+
+  std::vector<int> items;
+
+  for (Py_ssize_t i = 0; i < num_items; i++) {
+    PyObject *py_item = PySequence_Fast_GET_ITEM(py_list, i);
+    if (!PyNumber_Check(py_item)) {
+      PyErr_SetString(PyExc_TypeError, "expected list with numbers");
+      return NULL;
+    }
+
+    items.push_back(PyInt_AsLong(py_item));
+    Py_DECREF(py_item);
+  }
+
+  Py_DECREF(py_list);
+
+  std::unique_ptr<std::string> encoded;
+
+  Py_BEGIN_ALLOW_THREADS
+  encoded = GoogleEncode::encodeList(items);
+  Py_END_ALLOW_THREADS
+
+  // prepare output
+  PyObject *py_result = PyString_FromString(encoded->c_str());
+
+  return py_result;
+}
+
 PyMODINIT_FUNC
 __attribute__ ((visibility("default")))
 initXCSoarTools() {
