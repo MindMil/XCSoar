@@ -332,7 +332,7 @@ PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwa
   return py_result;
 }
 
-PyObject* XCSoarTools_EncodeList(PyXCSoarTools *self, PyObject *args) {
+PyObject* XCSoarTools_EncodeList(PyObject *self, PyObject *args) {
   PyObject *py_list;
 
   if (!PyArg_ParseTuple(args, "O", &py_list)) {

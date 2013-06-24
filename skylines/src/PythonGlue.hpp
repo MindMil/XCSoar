@@ -37,7 +37,6 @@ static PyObject* XCSoarTools_Path(PyXCSoarTools *self, PyObject *args);
 static PyObject* XCSoarTools_GoogleEncoded(PyXCSoarTools *self, PyObject *args);
 static PyObject* XCSoarTools_Times(PyXCSoarTools *self);
 static PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwargs);
-static PyObject* XCSoarTools_EncodeList(PyXCSoarTools *self, PyObject *args);
  
 static PyMethodDef XCSoarTools_methods[] = {
   {"EncodeList", (PyCFunction)XCSoarTools_EncodeList, METH_VARARGS, "Encode a list of int."},
@@ -100,6 +99,8 @@ PyTypeObject XCSoarToolsType = {
    * http://starship.python.net/crew/arcege/extwriting/pyext.html
    */
 };
+
+static PyObject* XCSoarTools_EncodeList(PyObject *self, PyObject *args);
 
 PyMODINIT_FUNC initXCSoarTools();
 
