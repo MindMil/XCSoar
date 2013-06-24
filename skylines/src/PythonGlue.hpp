@@ -38,6 +38,10 @@ static PyObject* XCSoarTools_Times(PyXCSoarTools *self);
 static PyObject* XCSoarTools_Analyse(PyXCSoarTools *self, PyObject *args, PyObject *kwargs);
  
 static PyMethodDef XCSoarTools_methods[] = {
+  {NULL, NULL, 0, NULL}
+};
+
+static PyMethodDef XCSoarTools_Flight_methods[] = {
   {"Path", (PyCFunction)XCSoarTools_Path, METH_VARARGS, "Get flight as list."},
   {"Times", (PyCFunction)XCSoarTools_Times, METH_VARARGS, "Get takeoff/release/landing times from flight."},
   {"Analyse", (PyCFunction)XCSoarTools_Analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
@@ -77,7 +81,7 @@ PyTypeObject XCSoarToolsType = {
   0,		         /* tp_weaklistoffset */
   0,		         /* tp_iter */
   0,		         /* tp_iternext */
-  XCSoarTools_methods,   /* tp_methods */
+  XCSoarTools_Flight_methods,   /* tp_methods */
   XCSoarTools_members,   /* tp_members */
   0,                     /* tp_getset */
   0,                     /* tp_base */

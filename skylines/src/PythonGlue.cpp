@@ -297,5 +297,5 @@ initXCSoarTools() {
   PyDateTime_IMPORT;
 
   Py_INCREF(&XCSoarToolsType);
-  PyModule_AddObject(m, "XCSoarTools", (PyObject *)&XCSoarToolsType);
+  PyModule_AddObject(m, "Flight", (PyObject *)&XCSoarToolsType);
 }

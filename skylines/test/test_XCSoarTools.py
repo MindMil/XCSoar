@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from XCSoarTools import XCSoarTools
+import XCSoarTools
 import time
 import argparse
 from pprint import pprint
@@ -25,7 +25,7 @@ def timing(f):
 
 @timing
 def init_tools(filename, keep):
-  return XCSoarTools(filename, keep=keep)
+  return XCSoarTools.Flight(filename, keep=keep)
 
 @timing
 def calc_times(tools):
