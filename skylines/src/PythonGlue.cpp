@@ -29,6 +29,7 @@
 #include "Flight.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "FlightPhaseDetector.hpp"
+#include "GoogleEncode.hpp"
 
 #include <cstdio>
 #include <vector>
@@ -145,6 +146,56 @@ PyObject* XCSoarTools_Path(PyXCSoarTools *self, PyObject *args) {
   delete replay;
 
   return py_fixes;
+}
+
+PyObject* XCSoarTools_GoogleEncoded(PyXCSoarTools *self, PyObject *args) {
+  PyObject *py_begin = NULL,
+           *py_end = NULL;
+
+  if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
+    printf("Cannot parse arguments\n");
+    return NULL;
+  }
+
+  BrokenDateTime begin, end;
+
+  if (py_begin != NULL && PyDateTime_Check(py_begin))
+    begin = Python::PyToBrokenDateTime(py_begin);
+  else
+    begin.FromUnixTimeUTC(0);
+
+  if (py_end != NULL && PyDateTime_Check(py_end))
+    end = Python::PyToBrokenDateTime(py_end);
+  else
+    end.FromUnixTimeUTC(std::numeric_limits<int64_t>::max());
+
+  GoogleEncode::EncodedFlight encoded;
+
+  Py_BEGIN_ALLOW_THREADS
+  encoded = self->flight->GoogleEncoded(begin, end, 4, 4, 0.001, true, 30);
+  Py_END_ALLOW_THREADS
+
+  // prepare output
+  PyObject *py_points = PyString_FromString(encoded.locations->c_str());
+  PyObject *py_levels = PyString_FromString(encoded.levels->c_str());
+  PyObject *py_times = PyString_FromString(encoded.times->c_str());
+  PyObject *py_gps_alt = PyString_FromString(encoded.gps_alt->c_str());
+  PyObject *py_enl = PyString_FromString(encoded.enl->c_str());
+
+  PyObject *py_result = PyDict_New();
+  PyDict_SetItemString(py_result, "points", py_points);
+  PyDict_SetItemString(py_result, "levels", py_levels);
+  PyDict_SetItemString(py_result, "times", py_times);
+  PyDict_SetItemString(py_result, "gps_alt", py_gps_alt);
+  PyDict_SetItemString(py_result, "enl", py_enl);
+
+  Py_DECREF(py_points);
+  Py_DECREF(py_levels);
+  Py_DECREF(py_times);
+  Py_DECREF(py_gps_alt);
+  Py_DECREF(py_enl);
+
+  return py_result;
 }
 
 PyObject* XCSoarTools_Times(PyXCSoarTools *self) {

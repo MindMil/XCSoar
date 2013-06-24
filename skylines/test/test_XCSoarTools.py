@@ -35,6 +35,10 @@ def calc_times(tools):
 def calc_analyse(tools, takeoff, release, landing, full, triangle, sprint):
   return tools.Analyse(takeoff, release, landing, full=full, triangle=triangle, sprint=sprint)
 
+@timing
+def calc_google(tools, takeoff, landing):
+  return tools.GoogleEncoded(takeoff, landing)
+
 
 print "Init XCSoarTools"
 tools = init_tools(args.file_name, False)
@@ -60,6 +64,8 @@ for dtime in times:
 
   pprint(calc_analyse(tools, takeoff['time'], release['time'], landing['time'], \
          1024, 1024, 64))
+
+  print calc_google(tools, takeoff['time'], landing['time'])
 
 del tools
 
