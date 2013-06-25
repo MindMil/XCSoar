@@ -118,6 +118,29 @@ GoogleEncode::encode(std::vector<FlightFix>::iterator fix_start,
   return flight;
 }
 
+std::unique_ptr<std::string> GoogleEncode::encodeLonLat(std::vector<std::pair<double, double>> &points) {
+  std::ostringstream encoded_points;
+
+  int plat = 0,
+      plng = 0;
+
+  for (auto point : points) {
+    int late5 = floor1e5(point.first);
+    int lnge5 = floor1e5(point.second);
+
+    int dlat = late5 - plat;
+    int dlng = lnge5 - plng;
+
+    plat = late5;
+    plng = lnge5;
+
+    encoded_points << encodeSignedNumber(dlat);
+    encoded_points << encodeSignedNumber(dlng);
+  }
+
+  return std::unique_ptr<std::string>(new std::string(encoded_points.str()));
+}
+
 std::unique_ptr<std::string> GoogleEncode::encodeList(std::vector<int> &points) {
   std::ostringstream encoded_list;
 

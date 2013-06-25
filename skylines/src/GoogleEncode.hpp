@@ -59,6 +59,10 @@ public:
                               std::vector<int>::iterator levels_start,
                               std::vector<int>::iterator levels_end);
 
+  /* encode a list of (lat, lon) pairs */
+  static std::unique_ptr<std::string>
+    encodeLonLat(std::vector<std::pair<double, double>> &points);
+
   static std::unique_ptr<std::string> encodeList(std::vector<int> &points);
 };
 

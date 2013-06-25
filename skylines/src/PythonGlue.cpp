@@ -332,6 +332,61 @@ PyObject* XCSoarTools_Flight_Analyse(PyXCSoarTools_Flight *self, PyObject *args,
   return py_result;
 }
 
+PyObject* XCSoarTools_EncodePoints(PyObject *self, PyObject *args) {
+  PyObject *py_list;
+
+  if (!PyArg_ParseTuple(args, "O", &py_list)) {
+    printf("Cannot parse argument\n");
+    return NULL;
+  }
+
+  if (!PySequence_Check(py_list)) {
+    printf("Not a list");
+    return NULL;
+  }
+
+  Py_ssize_t num_items = PySequence_Fast_GET_SIZE(py_list);
+
+  std::vector<std::pair<double, double>> items;
+
+  for (Py_ssize_t i = 0; i < num_items; i++) {
+    PyObject *py_item = PySequence_Fast_GET_ITEM(py_list, i);
+    if (PySequence_Fast_GET_SIZE(py_item) != 2) {
+      PyErr_SetString(PyExc_TypeError, "expected (n == 2)-tuple with numbers ((x0, y0), (x1, y1), ...)");
+      return NULL;
+    }
+
+    PyObject *py_lat = PySequence_Fast_GET_ITEM(py_item, 0);
+    PyObject *py_lon = PySequence_Fast_GET_ITEM(py_item, 1);
+
+    if (!PyFloat_Check(py_lat) || !PyFloat_Check(py_lon)) {
+      PyErr_SetString(PyExc_TypeError, "expected floats");
+      return NULL;
+    }
+
+    items.push_back(std::pair<double, double>(
+      PyFloat_AsDouble(py_lat), PyFloat_AsDouble(py_lon)));
+
+    Py_DECREF(py_lat);
+    Py_DECREF(py_lon);
+    Py_DECREF(py_item);
+  }
+
+  Py_DECREF(py_list);
+
+  std::unique_ptr<std::string> encoded;
+
+  Py_BEGIN_ALLOW_THREADS
+  encoded = GoogleEncode::encodeLonLat(items);
+  Py_END_ALLOW_THREADS
+
+  // prepare output
+  PyObject *py_result = PyString_FromString(encoded->c_str());
+
+  return py_result;
+}
+
+
 PyObject* XCSoarTools_EncodeList(PyObject *self, PyObject *args) {
   PyObject *py_list;
 

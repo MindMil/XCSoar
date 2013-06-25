@@ -98,9 +98,11 @@ PyTypeObject XCSoarTools_Flight_Type = {
 
 /* XCSoarTools methods */
 static PyObject* XCSoarTools_EncodeList(PyObject *self, PyObject *args);
+static PyObject* XCSoarTools_EncodePoints(PyObject *self, PyObject *args);
 
 static PyMethodDef XCSoarTools_methods[] = {
   {"EncodeList", (PyCFunction)XCSoarTools_EncodeList, METH_VARARGS, "Encode a list of int."},
+  {"EncodePoints", (PyCFunction)XCSoarTools_EncodePoints, METH_VARARGS, "Encode a list (lat, lon)-tuples."},
   {NULL, NULL, 0, NULL}
 };
 
