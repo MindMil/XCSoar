@@ -35,13 +35,13 @@ static PyXCSoarTools_Flight* XCSoarTools_Flight_init(PyXCSoarTools_Flight *self,
 static void XCSoarTools_Flight_dealloc(PyXCSoarTools_Flight *self);
 
 static PyObject* XCSoarTools_Flight_Path(PyXCSoarTools_Flight *self, PyObject *args);
-static PyObject* XCSoarTools_Flight_GoogleEncoded(PyXCSoarTools_Flight *self, PyObject *args);
+static PyObject* XCSoarTools_Flight_GoogleEncoded(PyXCSoarTools_Flight *self, PyObject *args, PyObject *kwargs);
 static PyObject* XCSoarTools_Flight_Times(PyXCSoarTools_Flight *self);
 static PyObject* XCSoarTools_Flight_Analyse(PyXCSoarTools_Flight *self, PyObject *args, PyObject *kwargs);
 
 static PyMethodDef XCSoarTools_Flight_methods[] = {
   {"Path", (PyCFunction)XCSoarTools_Flight_Path, METH_VARARGS, "Get flight as list."},
-  {"GoogleEncoded", (PyCFunction)XCSoarTools_Flight_GoogleEncoded, METH_VARARGS, "Get flight as google encoded string."},
+  {"GoogleEncoded", (PyCFunction)XCSoarTools_Flight_GoogleEncoded, METH_VARARGS | METH_KEYWORDS, "Get flight as google encoded string."},
   {"Times", (PyCFunction)XCSoarTools_Flight_Times, METH_VARARGS, "Get takeoff/release/landing times from flight."},
   {"Analyse", (PyCFunction)XCSoarTools_Flight_Analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
   {NULL, NULL, 0, NULL}

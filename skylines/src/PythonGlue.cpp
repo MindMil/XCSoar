@@ -148,14 +148,31 @@ PyObject* XCSoarTools_Flight_Path(PyXCSoarTools_Flight *self, PyObject *args) {
   return py_fixes;
 }
 
-PyObject* XCSoarTools_Flight_GoogleEncoded(PyXCSoarTools_Flight *self, PyObject *args) {
+PyObject* XCSoarTools_Flight_GoogleEncoded(PyXCSoarTools_Flight *self, PyObject *args, PyObject *kwargs) {
   PyObject *py_begin = NULL,
-           *py_end = NULL;
+           *py_end = NULL,
+           *py_force_endpoints = NULL;
 
-  if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
+  static char *kwlist[] = {"begin", "end", "num_levels", "zoom_factor",
+                           "max_delta_time", "threshold",
+                           "force_endpoints", NULL};
+
+  /* default values */
+  unsigned num_levels = 4,
+           zoom_factor = 4,
+           max_delta_time = 30;
+  double threshold = 0.001;
+  bool force_endpoints = true;
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|OOIIIdO", kwlist,
+                                   &py_begin, &py_end, &num_levels, &zoom_factor,
+                                   &max_delta_time, &threshold, &py_force_endpoints)) {
     printf("Cannot parse arguments\n");
     return NULL;
   }
+
+  if (py_force_endpoints != NULL && !PyObject_IsTrue(py_force_endpoints))
+    force_endpoints = false;
 
   BrokenDateTime begin, end;
 
@@ -172,7 +189,8 @@ PyObject* XCSoarTools_Flight_GoogleEncoded(PyXCSoarTools_Flight *self, PyObject 
   GoogleEncode::EncodedFlight encoded;
 
   Py_BEGIN_ALLOW_THREADS
-  encoded = self->flight->GoogleEncoded(begin, end, 4, 4, 0.001, true, 30);
+  encoded = self->flight->GoogleEncoded(begin, end, num_levels,
+    zoom_factor, threshold, force_endpoints, max_delta_time);
   Py_END_ALLOW_THREADS
 
   // prepare output
