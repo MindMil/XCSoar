@@ -69,7 +69,10 @@ GoogleEncode::encode(std::vector<FlightFix>::iterator fix_start,
                      encoded_enl;
 
   int plat = 0,
-      plng = 0;
+      plng = 0,
+      ptime = 0,
+      pgps_alt = 0,
+      penl = 0;
 
   auto level = levels_start;
   for (auto fix = fix_start;
@@ -90,9 +93,18 @@ GoogleEncode::encode(std::vector<FlightFix>::iterator fix_start,
       encoded_points << encodeSignedNumber(dlat);
       encoded_points << encodeSignedNumber(dlng);
 
-      encoded_time << encodeSignedNumber(int(fix->time));
-      encoded_gps_alt << encodeSignedNumber(int(fix->gps_altitude));
-      encoded_enl << encodeSignedNumber(int(fix->engine_noise_level));
+      int dtime = fix->time - ptime;
+      ptime = fix->time;
+
+      int dgps_alt= fix->gps_altitude - pgps_alt;
+      pgps_alt= fix->gps_altitude;
+
+      int denl= fix->engine_noise_level - penl;
+      penl = fix->engine_noise_level;
+
+      encoded_time << encodeSignedNumber(dtime);
+      encoded_gps_alt << encodeSignedNumber(dgps_alt);
+      encoded_enl << encodeSignedNumber(denl);
     }
   }
 
