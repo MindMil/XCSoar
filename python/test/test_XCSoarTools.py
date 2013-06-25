@@ -29,15 +29,15 @@ def init_tools(filename, keep):
 
 @timing
 def calc_times(tools):
-  return tools.Times()
+  return tools.times()
 
 @timing
 def calc_analyse(tools, takeoff, release, landing, full, triangle, sprint):
-  return tools.Analyse(takeoff, release, landing, full=full, triangle=triangle, sprint=sprint)
+  return tools.analyse(takeoff, release, landing, full=full, triangle=triangle, sprint=sprint)
 
 @timing
 def calc_google(tools, takeoff, landing):
-  return tools.GoogleEncoded(takeoff, landing)
+  return tools.google_encoded(takeoff, landing)
 
 
 print "Init xcsoar"
@@ -58,7 +58,7 @@ for dtime in times:
   print "Release: {}, location {} {}".format(release['time'], release['longitude'], release['latitude'])
   print "Landing: {}, location {} {}".format(landing['time'], landing['longitude'], landing['latitude'])
 
-  fixes = tools.Path(takeoff['time'], release['time'])
+  fixes = tools.path(takeoff['time'], release['time'])
   for fix in fixes:
     print fix
 
@@ -69,5 +69,5 @@ for dtime in times:
 
 del tools
 
-print xcsoar.EncodeList([0, 1, 2, 3, 4, 5])
+print xcsoar.encode_list([0, 1, 2, 3, 4, 5])
 

@@ -34,16 +34,16 @@ struct Pyxcsoar_Flight {
 static Pyxcsoar_Flight* xcsoar_Flight_init(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
 static void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self);
 
-static PyObject* xcsoar_Flight_Path(Pyxcsoar_Flight *self, PyObject *args);
-static PyObject* xcsoar_Flight_GoogleEncoded(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
-static PyObject* xcsoar_Flight_Times(Pyxcsoar_Flight *self);
-static PyObject* xcsoar_Flight_Analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
+static PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args);
+static PyObject* xcsoar_Flight_google_encoded(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
+static PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self);
+static PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
 
 static PyMethodDef xcsoar_Flight_methods[] = {
-  {"Path", (PyCFunction)xcsoar_Flight_Path, METH_VARARGS, "Get flight as list."},
-  {"GoogleEncoded", (PyCFunction)xcsoar_Flight_GoogleEncoded, METH_VARARGS | METH_KEYWORDS, "Get flight as google encoded string."},
-  {"Times", (PyCFunction)xcsoar_Flight_Times, METH_VARARGS, "Get takeoff/release/landing times from flight."},
-  {"Analyse", (PyCFunction)xcsoar_Flight_Analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
+  {"path", (PyCFunction)xcsoar_Flight_path, METH_VARARGS, "Get flight as list."},
+  {"google_encoded", (PyCFunction)xcsoar_Flight_google_encoded, METH_VARARGS | METH_KEYWORDS, "Get flight as google encoded string."},
+  {"times", (PyCFunction)xcsoar_Flight_times, METH_VARARGS, "Get takeoff/release/landing times from flight."},
+  {"analyse", (PyCFunction)xcsoar_Flight_analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
   {NULL, NULL, 0, NULL}
 };
 
@@ -97,12 +97,12 @@ PyTypeObject xcsoar_Flight_Type = {
 };
 
 /* xcsoar methods */
-static PyObject* xcsoar_EncodeList(PyObject *self, PyObject *args);
-static PyObject* xcsoar_EncodePoints(PyObject *self, PyObject *args);
+static PyObject* xcsoar_encode_list(PyObject *self, PyObject *args);
+static PyObject* xcsoar_encode_points(PyObject *self, PyObject *args);
 
 static PyMethodDef xcsoar_methods[] = {
-  {"EncodeList", (PyCFunction)xcsoar_EncodeList, METH_VARARGS, "Encode a list of int."},
-  {"EncodePoints", (PyCFunction)xcsoar_EncodePoints, METH_VARARGS, "Encode a list (lat, lon)-tuples."},
+  {"encode_list", (PyCFunction)xcsoar_encode_list, METH_VARARGS, "Encode a list of int."},
+  {"encode_points", (PyCFunction)xcsoar_encode_points, METH_VARARGS, "Encode a list (lat, lon)-tuples."},
   {NULL, NULL, 0, NULL}
 };
 

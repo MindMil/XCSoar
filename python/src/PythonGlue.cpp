@@ -60,7 +60,7 @@ void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self) {
   delete self->flight;
 }
 
-PyObject* xcsoar_Flight_Path(Pyxcsoar_Flight *self, PyObject *args) {
+PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
   PyObject *py_begin = NULL,
            *py_end = NULL;
 
@@ -148,7 +148,7 @@ PyObject* xcsoar_Flight_Path(Pyxcsoar_Flight *self, PyObject *args) {
   return py_fixes;
 }
 
-PyObject* xcsoar_Flight_GoogleEncoded(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
+PyObject* xcsoar_Flight_google_encoded(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
   PyObject *py_begin = NULL,
            *py_end = NULL,
            *py_force_endpoints = NULL;
@@ -216,7 +216,7 @@ PyObject* xcsoar_Flight_GoogleEncoded(Pyxcsoar_Flight *self, PyObject *args, PyO
   return py_result;
 }
 
-PyObject* xcsoar_Flight_Times(Pyxcsoar_Flight *self) {
+PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
   std::vector<Result> results;
 
   Py_BEGIN_ALLOW_THREADS
@@ -257,7 +257,7 @@ PyObject* xcsoar_Flight_Times(Pyxcsoar_Flight *self) {
   return py_times;
 }
 
-PyObject* xcsoar_Flight_Analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
+PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
   static char *kwlist[] = {"takeoff", "release", "landing", "full", "triangle", "sprint", NULL};
   PyObject *py_takeoff, *py_release, *py_landing;
   unsigned full = 512,
@@ -350,7 +350,7 @@ PyObject* xcsoar_Flight_Analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   return py_result;
 }
 
-PyObject* xcsoar_EncodePoints(PyObject *self, PyObject *args) {
+PyObject* xcsoar_encode_points(PyObject *self, PyObject *args) {
   PyObject *py_list;
 
   if (!PyArg_ParseTuple(args, "O", &py_list)) {
@@ -405,7 +405,7 @@ PyObject* xcsoar_EncodePoints(PyObject *self, PyObject *args) {
 }
 
 
-PyObject* xcsoar_EncodeList(PyObject *self, PyObject *args) {
+PyObject* xcsoar_encode_list(PyObject *self, PyObject *args) {
   PyObject *py_list;
 
   if (!PyArg_ParseTuple(args, "O", &py_list)) {
