@@ -20,8 +20,8 @@
 }
 */
 
-#ifndef SKYLINES_FLIGHTTIMES_H
-#define SKYLINES_FLIGHTTIMES_H
+#ifndef PYTHON_FLIGHTTIMES_HPP
+#define PYTHON_FLIGHTTIMES_HPP
 
 #include "Time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
@@ -58,4 +58,4 @@ bool Run(DebugReplay &replay, Result &result);
 
 void FlightTimes(DebugReplay &replay, std::vector<Result> &results);
 
-#endif
+#endif /* PYTHON_FLIGHTTIMES_HPP */

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef SKYLINES_FLIGHT_FIX_H
-#define SKYLINES_FLIGHT_FIX_H
+#ifndef PYTHON_FLIGHT_FIX_HPP
+#define PYTHON_FLIGHT_FIX_HPP
 
 #include "NMEA/MoreData.hpp"
 #include <cinttypes>
@@ -122,4 +122,4 @@ struct FlightFix {
 };
 
 
-#endif /* SKYLINES_FLIGHT_FIX_H */
+#endif /* PYTHON_FLIGHT_FIX_HPP */

@@ -22,8 +22,8 @@
   Original code of Douglas-Peucker algorithm by Robert Coup <robert.coup@koordinates.com>
 */
 
-#ifndef SKYLINES_DOUGLASPEUCKERMOD_H
-#define SKYLINES_DOUGLASPEUCKERMOD_H
+#ifndef PYTHON_DOUGLASPEUCKERMOD_HPP
+#define PYTHON_DOUGLASPEUCKERMOD_HPP
 
 #include <vector>
 #include <list>
@@ -75,4 +75,4 @@ private:
   std::vector<int> classify(size_t n_points, const double dists[], double abs_max_dist);
 };
 
-#endif /* SKYLINES_DOUGLASPEUCKERMOD_H */
+#endif /* PYTHON_DOUGLASPEUCKERMOD_HPP */

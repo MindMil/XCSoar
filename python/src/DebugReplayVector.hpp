@@ -59,4 +59,4 @@ protected:
   void CopyFromFix(const FlightFix &fix);
 };
 
-#endif
+#endif /* XCSOAR_DEBUG_REPLAY_VECTOR_HPP */

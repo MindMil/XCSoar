@@ -20,8 +20,8 @@
 }
 */
 
-#ifndef SKYLINES_PYTHONGLUE_H
-#define SKYLINES_PYTHONGLUE_H
+#ifndef PYTHON_PYTHONGLUE_HPP
+#define PYTHON_PYTHONGLUE_HPP
 
 #include <Python.h>
 #include "Flight.hpp"
@@ -108,4 +108,4 @@ static PyMethodDef xcsoar_methods[] = {
 
 PyMODINIT_FUNC initxcsoar();
 
-#endif /* SKYLINES_PYTHONGLUE_H */
+#endif /* PYTHON_PYTHONGLUE_HPP */

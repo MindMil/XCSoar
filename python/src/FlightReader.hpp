@@ -20,8 +20,8 @@
 }
 */
 
-#ifndef SKYLINES_FLIGHT_READER_H
-#define SKYLINES_FLIGHT_READER_H
+#ifndef PYTHON_FLIGHT_READER_HPP
+#define PYTHON_FLIGHT_READER_HPP
 
 #include <vector>
 
@@ -32,4 +32,4 @@ void Run(DebugReplay &replay, std::vector<FlightFix> &flight_fixes);
 
 bool FlightReader(const char *input_file, std::vector<FlightFix> &flight_fixes);
 
-#endif /* SKYLINES_FLIGHT_READER_H */
+#endif /* PYTHON_FLIGHT_READER_HPP */

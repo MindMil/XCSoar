@@ -22,8 +22,8 @@
   Original code of Douglas-Peucker algorithm by Robert Coup <robert.coup@koordinates.com>
 */
 
-#ifndef SKYLINES_GOOGLEENCODE_H
-#define SKYLINES_GOOGLEENCODE_H
+#ifndef PYTHON_GOOGLEENCODE_HPP
+#define PYTHON_GOOGLEENCODE_HPP
 
 #include <string>
 #include <cmath>
@@ -66,4 +66,4 @@ public:
   static std::unique_ptr<std::string> encodeList(std::vector<int> &points);
 };
 
-#endif /* SKYLINES_GOOGLEENCODE_H */
+#endif /* PYTHON_GOOGLEENCODE_HPP */

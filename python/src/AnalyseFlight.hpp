@@ -20,8 +20,8 @@
 }
 */
 
-#ifndef SKYLINES_ANALYSEFLIGHT_H
-#define SKYLINES_ANALYSEFLIGHT_H
+#ifndef PYTHON_ANALYSEFLIGHT_HPP
+#define PYTHON_ANALYSEFLIGHT_HPP
 
 #include "Contest/ContestManager.hpp"
 #include "Time/BrokenDateTime.hpp"
@@ -52,4 +52,5 @@ void AnalyseFlight(DebugReplay &replay,
              const unsigned full_points = 512,
              const unsigned triangle_points = 1024,
              const unsigned sprint_points = 96);
-#endif
+
+#endif /* PYTHON_ANALYSEFLIGHT_HPP */

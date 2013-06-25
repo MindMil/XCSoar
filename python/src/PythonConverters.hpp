@@ -20,8 +20,8 @@
 }
 */
 
-#ifndef SKYLINES_PYTHONCONVERTERS_H
-#define SKYLINES_PYTHONCONVERTERS_H
+#ifndef PYTHON_PYTHONCONVERTERS_HPP
+#define PYTHON_PYTHONCONVERTERS_HPP
 
 #include <Python.h>
 
@@ -71,4 +71,4 @@ namespace Python {
   PyObject* WritePerformanceStats(const PhaseTotals &totals);
 };
 
-#endif /* SKYLINES_PYTHONCONVERTERS_H */
+#endif /* PYTHON_PYTHONCONVERTERS_HPP */

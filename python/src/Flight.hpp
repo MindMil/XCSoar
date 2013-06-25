@@ -1,5 +1,5 @@
-#ifndef SKYLINES_FLIGHT_H
-#define SKYLINES_FLIGHT_H
+#ifndef PYTHON_FLIGHT_HPP
+#define PYTHON_FLIGHT_HPP
 
 #include "FlightFix.hpp"
 #include "FlightTimes.hpp"
@@ -72,4 +72,4 @@ public:
     const unsigned max_delta_time);
 };
 
-#endif /* SKYLINES_FLIGHT_H */
+#endif /* PYTHON_FLIGHT_HPP */
