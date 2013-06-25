@@ -69,56 +69,56 @@ endif
 
 endef
 
-SKYLINES = \
+PYTHON_TEST = \
 	skylines_flightreader \
 	skylines_flighttimes
 
-skylines-test: $(call name-to-bin,$(SKYLINES))
+python-test: $(call name-to-bin,$(PYTHON_TEST))
 
-skylines: $(call name-to-so,py_xcsoar)
+python: $(call name-to-so,py_xcsoar)
 
-SKYLINES_FLIGHTREADER_SOURCES = \
+PYTHON_FLIGHTREADER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SKYLINES_TEST_SRC)/skylines_flightreader.cpp \
-	$(SKYLINES_SRC)/FlightReader.cpp
-SKYLINES_FLIGHTREADER_LDADD = $(DEBUG_REPLAY_LDADD)
-SKYLINES_FLIGHTREADER_DEPENDS = MATH UTIL GEO TIME
-SKYLINES_FLIGHTREADER_CPPFLAGS = -I$(TEST_SRC_DIR) -I$(SKYLINES_SRC)
-$(eval $(call link-program,skylines_flightreader,SKYLINES_FLIGHTREADER))
+	$(PYTHON_TEST_SRC)/skylines_flightreader.cpp \
+	$(PYTHON_SRC)/FlightReader.cpp
+PYTHON_FLIGHTREADER_LDADD = $(DEBUG_REPLAY_LDADD)
+PYTHON_FLIGHTREADER_DEPENDS = MATH UTIL GEO TIME
+PYTHON_FLIGHTREADER_CPPFLAGS = -I$(TEST_SRC_DIR) -I$(PYTHON_SRC)
+$(eval $(call link-program,skylines_flightreader,PYTHON_FLIGHTREADER))
 
 
-SKYLINES_FLIGHTTIMES_SOURCES = \
+PYTHON_FLIGHTTIMES_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SKYLINES_TEST_SRC)/skylines_flighttimes.cpp \
-	$(SKYLINES_SRC)/FlightReader.cpp \
-	$(SKYLINES_SRC)/FlightTimes.cpp \
-	$(SKYLINES_SRC)/DebugReplayVector.cpp \
+	$(PYTHON_TEST_SRC)/skylines_flighttimes.cpp \
+	$(PYTHON_SRC)/FlightReader.cpp \
+	$(PYTHON_SRC)/FlightTimes.cpp \
+	$(PYTHON_SRC)/DebugReplayVector.cpp \
 	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp
-SKYLINES_FLIGHTTIMES_LDADD = $(DEBUG_REPLAY_LDADD)
-SKYLINES_FLIGHTTIMES_DEPENDS = MATH UTIL GEO TIME
-SKYLINES_FLIGHTTIMES_CPPFLAGS = -I$(TEST_SRC_DIR) -I$(SKYLINES_SRC)
-$(eval $(call link-program,skylines_flighttimes,SKYLINES_FLIGHTTIMES))
+PYTHON_FLIGHTTIMES_LDADD = $(DEBUG_REPLAY_LDADD)
+PYTHON_FLIGHTTIMES_DEPENDS = MATH UTIL GEO TIME
+PYTHON_FLIGHTTIMES_CPPFLAGS = -I$(TEST_SRC_DIR) -I$(PYTHON_SRC)
+$(eval $(call link-program,skylines_flighttimes,PYTHON_FLIGHTTIMES))
 
 
-SKYLINES_PYTHON_SOURCES = \
+PYTHON_PYTHON_SOURCES = \
         $(DEBUG_REPLAY_SOURCES) \
-        $(SKYLINES_SRC)/FlightReader.cpp \
-        $(SKYLINES_SRC)/Flight.cpp \
-        $(SKYLINES_SRC)/FlightTimes.cpp \
-        $(SKYLINES_SRC)/DebugReplayVector.cpp \
-	$(SKYLINES_SRC)/AnalyseFlight.cpp \
-	$(SKYLINES_SRC)/GoogleEncode.cpp \
-	$(SKYLINES_SRC)/DouglasPeuckerMod.cpp \
-	$(SKYLINES_SRC)/PythonGlue.cpp \
-	$(SKYLINES_SRC)/PythonConverters.cpp \
+        $(PYTHON_SRC)/FlightReader.cpp \
+        $(PYTHON_SRC)/Flight.cpp \
+        $(PYTHON_SRC)/FlightTimes.cpp \
+        $(PYTHON_SRC)/DebugReplayVector.cpp \
+	$(PYTHON_SRC)/AnalyseFlight.cpp \
+	$(PYTHON_SRC)/GoogleEncode.cpp \
+	$(PYTHON_SRC)/DouglasPeuckerMod.cpp \
+	$(PYTHON_SRC)/PythonGlue.cpp \
+	$(PYTHON_SRC)/PythonConverters.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp
-SKYLINES_PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
-SKYLINES_PYTHON_LDLIBS = -lpython2.7
-SKYLINES_PYTHON_DEPENDS = CONTEST UTIL GEO TIME MATH
-SKYLINES_PYTHON_CPPFLAGS = -I/usr/include/python2.7 \
+PYTHON_PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
+PYTHON_PYTHON_LDLIBS = -lpython2.7
+PYTHON_PYTHON_DEPENDS = CONTEST UTIL GEO TIME MATH
+PYTHON_PYTHON_CPPFLAGS = -I/usr/include/python2.7 \
 	-I$(TEST_SRC_DIR)
-$(eval $(call link-python-library,py_xcsoar,SKYLINES_PYTHON))
+$(eval $(call link-python-library,py_xcsoar,PYTHON_PYTHON))

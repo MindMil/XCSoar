@@ -124,7 +124,7 @@ include $(topdir)/build/vali.mk
 include $(topdir)/build/test.mk
 include $(topdir)/build/hot.mk
 
-include $(topdir)/build/skylines.mk
+include $(topdir)/build/python.mk
 
 # Load local-config a second time
 # to set (override) choices for GXX and friends.
