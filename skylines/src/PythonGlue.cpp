@@ -36,7 +36,7 @@
 #include <cinttypes>
 #include <limits>
 
-PyXCSoarTools_Flight* XCSoarTools_Flight_init(PyXCSoarTools_Flight *self, PyObject *args, PyObject *kwargs) {
+Pyxcsoar_Flight* xcsoar_Flight_init(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
   /* constructor */
   static char *kwlist[] = {"file", "keep", NULL};
   const char *input_file;
@@ -55,12 +55,12 @@ PyXCSoarTools_Flight* XCSoarTools_Flight_init(PyXCSoarTools_Flight *self, PyObje
   return 0;
 }
 
-void XCSoarTools_Flight_dealloc(PyXCSoarTools_Flight *self) {
+void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self) {
   /* destructor */
   delete self->flight;
 }
 
-PyObject* XCSoarTools_Flight_Path(PyXCSoarTools_Flight *self, PyObject *args) {
+PyObject* xcsoar_Flight_Path(Pyxcsoar_Flight *self, PyObject *args) {
   PyObject *py_begin = NULL,
            *py_end = NULL;
 
@@ -148,7 +148,7 @@ PyObject* XCSoarTools_Flight_Path(PyXCSoarTools_Flight *self, PyObject *args) {
   return py_fixes;
 }
 
-PyObject* XCSoarTools_Flight_GoogleEncoded(PyXCSoarTools_Flight *self, PyObject *args, PyObject *kwargs) {
+PyObject* xcsoar_Flight_GoogleEncoded(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
   PyObject *py_begin = NULL,
            *py_end = NULL,
            *py_force_endpoints = NULL;
@@ -216,7 +216,7 @@ PyObject* XCSoarTools_Flight_GoogleEncoded(PyXCSoarTools_Flight *self, PyObject 
   return py_result;
 }
 
-PyObject* XCSoarTools_Flight_Times(PyXCSoarTools_Flight *self) {
+PyObject* xcsoar_Flight_Times(Pyxcsoar_Flight *self) {
   std::vector<Result> results;
 
   Py_BEGIN_ALLOW_THREADS
@@ -257,7 +257,7 @@ PyObject* XCSoarTools_Flight_Times(PyXCSoarTools_Flight *self) {
   return py_times;
 }
 
-PyObject* XCSoarTools_Flight_Analyse(PyXCSoarTools_Flight *self, PyObject *args, PyObject *kwargs) {
+PyObject* xcsoar_Flight_Analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
   static char *kwlist[] = {"takeoff", "release", "landing", "full", "triangle", "sprint", NULL};
   PyObject *py_takeoff, *py_release, *py_landing;
   unsigned full = 512,
@@ -350,7 +350,7 @@ PyObject* XCSoarTools_Flight_Analyse(PyXCSoarTools_Flight *self, PyObject *args,
   return py_result;
 }
 
-PyObject* XCSoarTools_EncodePoints(PyObject *self, PyObject *args) {
+PyObject* xcsoar_EncodePoints(PyObject *self, PyObject *args) {
   PyObject *py_list;
 
   if (!PyArg_ParseTuple(args, "O", &py_list)) {
@@ -405,7 +405,7 @@ PyObject* XCSoarTools_EncodePoints(PyObject *self, PyObject *args) {
 }
 
 
-PyObject* XCSoarTools_EncodeList(PyObject *self, PyObject *args) {
+PyObject* xcsoar_EncodeList(PyObject *self, PyObject *args) {
   PyObject *py_list;
 
   if (!PyArg_ParseTuple(args, "O", &py_list)) {
@@ -449,19 +449,19 @@ PyObject* XCSoarTools_EncodeList(PyObject *self, PyObject *args) {
 
 PyMODINIT_FUNC
 __attribute__ ((visibility("default")))
-initXCSoarTools() {
+initxcsoar() {
   PyObject* m;
 
-  if (PyType_Ready(&XCSoarTools_Flight_Type) < 0)
+  if (PyType_Ready(&xcsoar_Flight_Type) < 0)
       return;
 
-  m = Py_InitModule3("XCSoarTools", XCSoarTools_methods, "XCSoar Tools");
+  m = Py_InitModule3("xcsoar", xcsoar_methods, "XCSoar Tools");
 
   if (m == NULL)
     return;
 
   PyDateTime_IMPORT;
 
-  Py_INCREF(&XCSoarTools_Flight_Type);
-  PyModule_AddObject(m, "Flight", (PyObject *)&XCSoarTools_Flight_Type);
+  Py_INCREF(&xcsoar_Flight_Type);
+  PyModule_AddObject(m, "Flight", (PyObject *)&xcsoar_Flight_Type);
 }

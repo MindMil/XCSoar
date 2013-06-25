@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import XCSoarTools
+import xcsoar
 import time
 import argparse
 from pprint import pprint
@@ -25,7 +25,7 @@ def timing(f):
 
 @timing
 def init_tools(filename, keep):
-  return XCSoarTools.Flight(filename, keep=keep)
+  return xcsoar.Flight(filename, keep=keep)
 
 @timing
 def calc_times(tools):
@@ -40,7 +40,7 @@ def calc_google(tools, takeoff, landing):
   return tools.GoogleEncoded(takeoff, landing)
 
 
-print "Init XCSoarTools"
+print "Init xcsoar"
 tools = init_tools(args.file_name, False)
 
 print "Calculating times..."
@@ -69,5 +69,5 @@ for dtime in times:
 
 del tools
 
-print XCSoarTools.EncodeList([0, 1, 2, 3, 4, 5])
+print xcsoar.EncodeList([0, 1, 2, 3, 4, 5])
 

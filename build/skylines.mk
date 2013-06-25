@@ -75,7 +75,7 @@ SKYLINES = \
 
 skylines-test: $(call name-to-bin,$(SKYLINES))
 
-skylines: $(call name-to-so,XCSoarTools)
+skylines: $(call name-to-so,py_xcsoar)
 
 SKYLINES_FLIGHTREADER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
@@ -121,4 +121,4 @@ SKYLINES_PYTHON_LDLIBS = -lpython2.7
 SKYLINES_PYTHON_DEPENDS = CONTEST UTIL GEO TIME MATH
 SKYLINES_PYTHON_CPPFLAGS = -I/usr/include/python2.7 \
 	-I$(TEST_SRC_DIR)
-$(eval $(call link-python-library,XCSoarTools,SKYLINES_PYTHON))
+$(eval $(call link-python-library,py_xcsoar,SKYLINES_PYTHON))
