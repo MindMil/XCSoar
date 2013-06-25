@@ -3,32 +3,60 @@ XCSoar Python API for SkyLines
 
 Compile with
 
- make skylines
+ make python
 
-and copy the library to your desired location.
+and copy the library file ('py_xcsoar.so') to your desired location
+as 'xcsoar.so'.
 
 
 Short API description
 ---------------------
 
+* class xcsoar.Flight(file=igcfile, [keep])
 
-* class XCSoarTools(file_name, keep=keep)
-
-Initializes the API with igc file $file_name, set
-keep = True if you want to keep the data in memory.
-
-
-* XCSoarTools.Path()
-
-Returns a list of fixes
+Initializes the API with the igcfile. The file won't be
+loaded into memory unless you set keep == True.
 
 
-* XCSoarTools.Times()
-
-Returns a list of takeoff/release/landing times found in the flight
+The class Flight supports the following methods:
 
 
-* XCSoarTools.Analyse(begin, end, full=512, triangle=1024, sprint=96)
+* Flight.path([begin], [end])
 
-Analyse a flight from begin to end (both DateTime objects), optional
-specifying the number of trace points for the optimiser.
+Returns a list of tuples with flight fixes. If
+begin or end are set to a DateTime object, the
+output is limited to those times.
+
+
+* Flight.google_encoded([begin], [end], [num_levels], [zoom_factor],
+                        [max_delta_time], [threshold], [force_endpoints])
+
+Returns a dict with google encoded fixes, times, height and enl values.
+Begin and end limits the output to the given time range.
+The options num_levels, zoom_factor and threshold control the level
+of detail for each zoom level of the douglas peucker algorithm.
+To get uniform distributed points set max_delta_time to a reasonable
+value. Setting force_endpoints to True forces the endpoints to be
+at the highest level.
+
+
+* Flight.times()
+
+Returns a list of detected takeoff/release/landing times found in the flight.
+
+
+* Flight.analyse([begin], [end], [full], [triangle], [sprint])
+
+Analyse a flight with the scoring window from begin to end (both DateTime
+objects), optional specifying the number of trace points for the optimiser.
+
+
+* encode_points(points)
+
+Direct access to the google encoding for geopoints. Pass a list of tuples
+with (latitude, longitude), both in degree.
+
+
+* encode_list(list)
+
+Encodes a list of int with the google encoding algorithm.
