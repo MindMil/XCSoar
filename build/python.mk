@@ -70,7 +70,7 @@ endef
 
 python: $(call name-to-so,py_xcsoar)
 
-PYTHON_PYTHON_SOURCES = \
+PYTHON_SOURCES = \
         $(DEBUG_REPLAY_SOURCES) \
         $(PYTHON_SRC)/FlightReader.cpp \
         $(PYTHON_SRC)/Flight.cpp \
@@ -85,9 +85,9 @@ PYTHON_PYTHON_SOURCES = \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp
-PYTHON_PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
-PYTHON_PYTHON_LDLIBS = -lpython2.7
-PYTHON_PYTHON_DEPENDS = CONTEST UTIL GEO TIME MATH
-PYTHON_PYTHON_CPPFLAGS = -I/usr/include/python2.7 \
+PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
+PYTHON_LDLIBS = -lpython2.7
+PYTHON_DEPENDS = CONTEST UTIL GEO TIME MATH
+PYTHON_CPPFLAGS = -I/usr/include/python2.7 \
 	-I$(TEST_SRC_DIR)
-$(eval $(call link-python-library,py_xcsoar,PYTHON_PYTHON))
+$(eval $(call link-python-library,py_xcsoar,PYTHON))
