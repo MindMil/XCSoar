@@ -1,4 +1,3 @@
-name-to-bin = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(1))
 name-to-so = $(patsubst %,$(TARGET_BIN_DIR)/%.so,$(1))
 
 # Generates a shared library linking rule for python.
@@ -69,37 +68,7 @@ endif
 
 endef
 
-PYTHON_TEST = \
-	skylines_flightreader \
-	skylines_flighttimes
-
-python-test: $(call name-to-bin,$(PYTHON_TEST))
-
 python: $(call name-to-so,py_xcsoar)
-
-PYTHON_FLIGHTREADER_SOURCES = \
-	$(DEBUG_REPLAY_SOURCES) \
-	$(PYTHON_TEST_SRC)/skylines_flightreader.cpp \
-	$(PYTHON_SRC)/FlightReader.cpp
-PYTHON_FLIGHTREADER_LDADD = $(DEBUG_REPLAY_LDADD)
-PYTHON_FLIGHTREADER_DEPENDS = MATH UTIL GEO TIME
-PYTHON_FLIGHTREADER_CPPFLAGS = -I$(TEST_SRC_DIR) -I$(PYTHON_SRC)
-$(eval $(call link-program,skylines_flightreader,PYTHON_FLIGHTREADER))
-
-
-PYTHON_FLIGHTTIMES_SOURCES = \
-	$(DEBUG_REPLAY_SOURCES) \
-	$(PYTHON_TEST_SRC)/skylines_flighttimes.cpp \
-	$(PYTHON_SRC)/FlightReader.cpp \
-	$(PYTHON_SRC)/FlightTimes.cpp \
-	$(PYTHON_SRC)/DebugReplayVector.cpp \
-	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
-	$(SRC)/Computer/CirclingComputer.cpp
-PYTHON_FLIGHTTIMES_LDADD = $(DEBUG_REPLAY_LDADD)
-PYTHON_FLIGHTTIMES_DEPENDS = MATH UTIL GEO TIME
-PYTHON_FLIGHTTIMES_CPPFLAGS = -I$(TEST_SRC_DIR) -I$(PYTHON_SRC)
-$(eval $(call link-program,skylines_flighttimes,PYTHON_FLIGHTTIMES))
-
 
 PYTHON_PYTHON_SOURCES = \
         $(DEBUG_REPLAY_SOURCES) \
