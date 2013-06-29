@@ -31,6 +31,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Math/SunEphemeris.hpp"
+#include "ThermalNotifier.hpp"
 
 static constexpr fixed THERMAL_TIME_MIN(45);
 
@@ -125,6 +126,11 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   lift_database_computer.Compute(calculated.lift_database,
                                  calculated.trace_history.CirclingAverage,
                                  basic, calculated);
+  ThermalNotifier::ProcessNotification (calculated.lift_database,
+                                        basic,
+                                        calculated);
+
+
   circling_computer.MaxHeightGain(basic, calculated.flight, calculated);
   NextLegEqThermal(basic, calculated, settings);
 }

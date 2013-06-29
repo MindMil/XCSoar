@@ -390,6 +390,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/TaskComputer.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/Computer/Events.cpp \
+	$(SRC)/Computer/ThermalNotifier.cpp \
 	$(SRC)/BallastDumpManager.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Logger/Logger.cpp \
