@@ -21,44 +21,51 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_VIRTUAL_CANVAS_HPP
-#define XCSOAR_SCREEN_VIRTUAL_CANVAS_HPP
+#ifndef XCSOAR_EVENT_LINUX_INPUT_HPP
+#define XCSOAR_EVENT_LINUX_INPUT_HPP
 
-#include "Screen/Canvas.hpp"
+#include "OS/FileDescriptor.hpp"
+#include "IO/Async/FileEventHandler.hpp"
+
+class IOLoop;
+struct Event;
 
 /**
- * A #Canvas implementation which draws to an off-screen surface.
- * This is an abstract class; see #BufferCanvas for
- * a concrete implementation.
+ * A driver for Linux input devices (/dev/input/event*).
  */
-class VirtualCanvas : public Canvas {
+class LinuxInputDevice final : private FileEventHandler {
+  IOLoop &io_loop;
+
+  unsigned x, y;
+  bool down;
+
+  bool moved, pressed, released;
+
+  FileDescriptor fd;
+
 public:
-  VirtualCanvas() = default;
-  VirtualCanvas(PixelSize new_size);
-  VirtualCanvas(const Canvas &canvas, PixelSize new_size);
+  explicit LinuxInputDevice(IOLoop &_io_loop)
+    :io_loop(_io_loop),
+     x(0), y(0) {}
 
-  ~VirtualCanvas() {
-    Destroy();
+  ~LinuxInputDevice() {
+    Close();
   }
 
-  void Create(PixelSize new_size);
+  bool Open(const char *path);
+  void Close();
 
-  void Create(const Canvas &canvas, PixelSize new_size);
-
-  void Create(const Canvas &canvas) {
-    Create(canvas, canvas.GetSize());
+  bool IsOpen() const {
+    return fd.IsDefined();
   }
 
-  void Destroy();
+  Event Generate();
 
-#ifdef USE_MEMORY_CANVAS
-  void Resize(PixelSize new_size) {
-    if (new_size != GetSize())
-      Create(*this, new_size);
-  }
+private:
+  void Read();
 
-  void Grow(PixelSize new_size);
-#endif
+  /* virtual methods from FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
 };
 
 #endif

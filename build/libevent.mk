@@ -1,4 +1,4 @@
-USE_CONSOLE ?= $(EGL)
+USE_CONSOLE ?= $(call bool_or,$(EGL),$(USE_FB))
 
 EVENT_SOURCES = \
 	$(SRC)/Event/Idle.cpp \
@@ -16,6 +16,7 @@ EVENT_SOURCES += \
 	$(SRC)/Event/Shared/TimerQueue.cpp \
 	$(SRC)/Event/Linux/TTYKeyboard.cpp \
 	$(SRC)/Event/Linux/Mouse.cpp \
+	$(SRC)/Event/Linux/Input.cpp \
 	$(SRC)/Event/Console/Globals.cpp \
 	$(SRC)/Event/Console/Timer.cpp \
 	$(SRC)/Event/Console/Loop.cpp \
@@ -33,6 +34,6 @@ EVENT_SOURCES += \
 	$(SRC)/Event/GDI/Queue.cpp
 endif
 
-EVENT_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS)
+EVENT_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS)
 
 $(eval $(call link-library,libevent,EVENT))

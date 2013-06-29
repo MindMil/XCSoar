@@ -21,44 +21,42 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_VIRTUAL_CANVAS_HPP
-#define XCSOAR_SCREEN_VIRTUAL_CANVAS_HPP
+#ifndef XCSOAR_SCREEN_CONSOLE_KEY_H
+#define XCSOAR_SCREEN_CONSOLE_KEY_H
 
-#include "Screen/Canvas.hpp"
-
-/**
- * A #Canvas implementation which draws to an off-screen surface.
- * This is an abstract class; see #BufferCanvas for
- * a concrete implementation.
- */
-class VirtualCanvas : public Canvas {
-public:
-  VirtualCanvas() = default;
-  VirtualCanvas(PixelSize new_size);
-  VirtualCanvas(const Canvas &canvas, PixelSize new_size);
-
-  ~VirtualCanvas() {
-    Destroy();
-  }
-
-  void Create(PixelSize new_size);
-
-  void Create(const Canvas &canvas, PixelSize new_size);
-
-  void Create(const Canvas &canvas) {
-    Create(canvas, canvas.GetSize());
-  }
-
-  void Destroy();
-
-#ifdef USE_MEMORY_CANVAS
-  void Resize(PixelSize new_size) {
-    if (new_size != GetSize())
-      Create(*this, new_size);
-  }
-
-  void Grow(PixelSize new_size);
-#endif
+enum {
+  KEY_SPACE = ' ',
+  KEY_UP = 0403,
+  KEY_DOWN = 0402,
+  KEY_LEFT = 0404,
+  KEY_RIGHT = 0405,
+  KEY_HOME = 0406,
+  KEY_END = 0550,
+  KEY_PRIOR = 0523,
+  KEY_NEXT = 0522,
+  KEY_RETURN = '\n',
+  KEY_F1 = 0411,
+  KEY_F2 = 0412,
+  KEY_F3 = 0413,
+  KEY_F4 = 0414,
+  KEY_F5 = 0415,
+  KEY_F6 = 0416,
+  KEY_F7 = 0417,
+  KEY_F8 = 0420,
+  KEY_F9 = 0421,
+  KEY_F10 = 0422,
+  KEY_F11 = 0423,
+  KEY_F12 = 0424,
+  KEY_ESCAPE = 0x1b,
+  KEY_TAB = '\t',
+  KEY_BACK = 0407,
+  KEY_MENU,
+  KEY_APP1,
+  KEY_APP2,
+  KEY_APP3,
+  KEY_APP4,
+  KEY_APP5,
+  KEY_APP6,
 };
 
 #endif

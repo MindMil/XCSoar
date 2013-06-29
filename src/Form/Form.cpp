@@ -390,7 +390,7 @@ WndForm::ShowModal()
   main_window.Refresh();
 #endif
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   EventLoop loop(*event_queue, main_window);
 #elif defined(ENABLE_SDL)
   EventLoop loop(main_window);
@@ -474,11 +474,15 @@ WndForm::ShowModal()
 #endif
 
 #ifdef KOBO
+#ifdef ENABLE_SDL
       if (event.GetKeyCode() == SDLK_POWER) {
         /* the Kobo power button closes the modal dialog */
         modal_result = mrCancel;
         continue;
       }
+#else
+  // TODO: check the console key code
+#endif
 #endif
     }
 
