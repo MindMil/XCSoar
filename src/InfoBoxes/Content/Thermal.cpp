@@ -189,6 +189,39 @@ UpdateInfoBoxNextLegEqThermal(InfoBoxData &data)
   SetVSpeed(data, next_leg_eq_thermal);
 }
 
+void
+UpdateInfoBoxCircleDiameter(InfoBoxData &data)
+{
+  if (!CommonInterface::Basic().airspeed_available.IsValid()) {
+    data.SetInvalid();
+    return;
+  }
+
+  const fixed circle_diameter = CommonInterface::Basic().true_airspeed
+     / fabs(CommonInterface::Calculated().turn_rate_smoothed)
+     * fixed(57.3 * 2); // convert turn rate to radians and double to get diameter
+
+  if (circle_diameter > fixed (2000)){
+    data.SetInvalid();
+    return;
+  }
+
+  TCHAR buffer[32];
+  Unit unit = FormatSmallUserDistance(buffer, circle_diameter, false, 0);
+  data.SetValue (buffer);
+  data.SetValueUnit(unit);
+
+  const fixed circle_duration = fixed (360) / fabs(CommonInterface::Calculated().turn_rate_smoothed);
+
+  StaticString<16> duration_buffer;
+  duration_buffer.Format(_T("%u s"), int(circle_duration));
+  _tcscpy (buffer, duration_buffer);
+  data.SetComment (buffer);
+
+
+}
+
+
 InfoBoxContentThermalAssistant::InfoBoxContentThermalAssistant()
   :renderer(UIGlobals::GetLook().thermal_assistant_gauge, 0, true) {}
 
