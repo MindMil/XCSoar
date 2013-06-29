@@ -125,6 +125,10 @@ Profile::Load(CirclingSettings &settings)
 {
   Get(ProfileKeys::EnableExternalTriggerCruise,
       settings.external_trigger_cruise_enabled);
+  Get(ProfileKeys::EnableThermalNotifier,
+      settings.thermal_notifier_sound_enabled);
+  Get(ProfileKeys::ThermalNotifierLeadTime,
+      settings.thermal_notifier_lead_time);
 }
 
 static bool

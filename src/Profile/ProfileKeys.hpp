@@ -175,6 +175,8 @@ extern const char AbortTaskMode[];
 extern const char AutoMcMode[];
 extern const char AutoMc[];
 extern const char EnableExternalTriggerCruise[];
+extern const char EnableThermalNotifier[];
+extern const char ThermalNotifierLeadTime[];
 extern const char OLCRules[];
 extern const char PredictContest[];
 extern const char Handicap[];

@@ -39,6 +39,8 @@ enum ControlIndex {
   EnableExternalTriggerCruise,
   AverEffTime,
   PredictWindDrift,
+  EnableThermalNotifier,
+  ThermNotifLeadTime,
 };
 
 class GlideComputerConfigPanel final : public RowFormWidget {
@@ -113,6 +115,22 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("Account for wind drift for the predicted circling duration. This reduces the arrival height for legs with head wind."),
              task_behaviour.glide.predict_wind_drift);
   SetExpertRow(PredictWindDrift);
+
+
+  AddBoolean(_("Thermal notifier sound"),
+             _("Enable thermal notifier sound when roll-out straightening needed during circling. Works best when additional vario information is coming from instruments."),
+             settings_computer.circling.thermal_notifier_sound_enabled);
+  SetExpertRow(EnableThermalNotifier);
+
+  AddFloat(_("Thermal notifier lead"),
+           _("Here you can decide on how many seconds in advance of 90 degrees of thermal the notification sound should be played to allow time for roll-out maneouver. "
+              "Suggested default is 1.5 seconds but may differ due to your instruments setup, glider type and circling style."),
+           _T("%.1f s"), _T("%.1f"),
+           fixed(0), fixed(3),
+           fixed(0.5), false,
+           settings_computer.circling.thermal_notifier_lead_time);
+  SetExpertRow(ThermNotifLeadTime);
+
 }
 
 bool
@@ -140,6 +158,13 @@ GlideComputerConfigPanel::Save(bool &_changed)
 
   changed |= SaveValue(PredictWindDrift, ProfileKeys::PredictWindDrift,
                        task_behaviour.glide.predict_wind_drift);
+
+  changed |= SaveValue(EnableThermalNotifier, ProfileKeys::EnableThermalNotifier,
+                       settings_computer.circling.thermal_notifier_sound_enabled);
+
+  changed |= SaveValue(ThermNotifLeadTime, ProfileKeys::ThermalNotifierLeadTime,
+                       settings_computer.circling.thermal_notifier_lead_time);
+
 
   _changed |= changed;
 

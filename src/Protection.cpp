@@ -95,6 +95,15 @@ TriggerAirspaceWarning()
 }
 
 void
+TriggerThermalNotification()
+{
+  assert(CommonInterface::main_window != NULL);
+
+  CommonInterface::main_window->SendThermalNotification();
+}
+
+
+void
 CreateCalculationThread()
 {
   assert(glide_computer != NULL);

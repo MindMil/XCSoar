@@ -73,6 +73,11 @@ class MainWindow : public SingleWindow {
      */
     RESTORE_PAGE,
 
+    /**
+     * Called by ThermalNotifier to play the straightening notification sound.
+     */
+    THERMAL_NOTIFICATION,
+
 #ifdef ANDROID
     /**
      * A previous crash has been detected, and the crash log was
@@ -266,6 +271,11 @@ public:
 
   void SendCalculatedUpdate() {
     SendUser((unsigned)Command::CALCULATED_UPDATE);
+  }
+
+  void SendThermalNotification() {
+    SendUser((unsigned)Command::THERMAL_NOTIFICATION);
+
   }
 
 #ifdef ANDROID

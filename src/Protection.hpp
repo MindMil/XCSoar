@@ -66,6 +66,14 @@ TriggerCalculatedUpdate();
 void
 TriggerAirspaceWarning();
 
+/**
+ * Called by the ThermalNotifier in calculation thread when new thermal
+ * straightening is adviced. Play notification sound.
+ */
+void
+TriggerThermalNotification();
+
+
 void CreateCalculationThread();
 
 extern bool global_running;

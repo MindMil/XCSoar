@@ -718,6 +718,10 @@ MainWindow::OnUser(unsigned id)
       PageActions::Restore();
     return true;
 
+  case Command::THERMAL_NOTIFICATION:
+    PlayResource(_T("IDR_WAV_CLEAR"));
+    return true;
+
 #ifdef ANDROID
   case Command::CRASH:
     ShowMessageBox(_T("How embarassing, we're terribly sorry!\n"

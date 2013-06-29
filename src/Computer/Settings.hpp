@@ -144,11 +144,18 @@ struct FeaturesSettings {
   void SetDefaults();
 };
 
+
 struct CirclingSettings {
   bool external_trigger_cruise_enabled;
 
+  bool thermal_notifier_sound_enabled;
+
+  fixed thermal_notifier_lead_time;
+
   void SetDefaults() {
     external_trigger_cruise_enabled = false;
+    thermal_notifier_sound_enabled = false;
+    thermal_notifier_lead_time = fixed (1.5);
   }
 };
 
