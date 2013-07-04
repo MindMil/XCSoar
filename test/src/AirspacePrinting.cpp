@@ -131,7 +131,7 @@ std::ostream& operator<< (std::ostream& f,
   case AirspaceWarning::WARNING_FILTER:
     f << "predicted filter\n";
     break;
-  case AirspaceWarning::WARNING_GLIDE:
+  case AirspaceWarning::WARNING_GLIDE_OR_FILTER:
     f << "predicted glide\n";
     break;
   case AirspaceWarning::WARNING_INSIDE:

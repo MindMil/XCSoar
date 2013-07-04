@@ -348,11 +348,11 @@ AirspaceWarningManager::UpdateFilter(const AircraftState& state, const bool circ
   if (circling) 
     return UpdatePredicted(state, location_predicted,
                            AirspaceAircraftPerformance(circling_filter),
-                            AirspaceWarning::WARNING_FILTER, prediction_time_filter);
+                            AirspaceWarning::WARNING_GLIDE_OR_FILTER, prediction_time_filter);
   else
     return UpdatePredicted(state, location_predicted,
                            AirspaceAircraftPerformance(cruise_filter),
-                            AirspaceWarning::WARNING_FILTER, prediction_time_filter);
+                            AirspaceWarning::WARNING_GLIDE_OR_FILTER, prediction_time_filter);
 }
 
 
@@ -369,7 +369,7 @@ AirspaceWarningManager::UpdateGlide(const AircraftState &state,
   const AirspaceAircraftPerformance perf_glide(glide_polar);
   return UpdatePredicted(state, location_predicted,
                           perf_glide,
-                          AirspaceWarning::WARNING_GLIDE, prediction_time_glide);
+                          AirspaceWarning::WARNING_GLIDE_OR_FILTER, prediction_time_glide);
 }
 
 

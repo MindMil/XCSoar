@@ -357,7 +357,7 @@ print_warnings(const AirspaceWarningManager &airspace_warnings)
   PrintAirspaceWarnings("output/results/res-as-warnings-inside.txt",
                         airspace_warnings, AirspaceWarning::WARNING_INSIDE);
   PrintAirspaceWarnings("output/results/res-as-warnings-glide.txt",
-                        airspace_warnings, AirspaceWarning::WARNING_GLIDE);
+                        airspace_warnings, AirspaceWarning::WARNING_GLIDE_OR_FILTER);
   PrintAirspaceWarnings("output/results/res-as-warnings-filter.txt",
                         airspace_warnings, AirspaceWarning::WARNING_FILTER);
   PrintAirspaceWarnings("output/results/res-as-warnings-task.txt",

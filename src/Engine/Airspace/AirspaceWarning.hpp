@@ -47,7 +47,7 @@ public:
     WARNING_CLEAR=0, /**< No warning active */
     WARNING_TASK, /**< Warning that task intersects airspace */
     WARNING_FILTER, /**< Warning that filtered state intersects airspace */
-    WARNING_GLIDE, /**< Warning that short-term glide intersects airspace */
+    WARNING_GLIDE_OR_FILTER, /**< Warning that short-term glide intersects airspace */
     WARNING_INSIDE /**< Warning that aircraft is currently inside airspace */
   };
 

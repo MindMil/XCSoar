@@ -124,7 +124,7 @@ AirspaceWarning::IsAckExpired() const
   case WARNING_CLEAR:
   case WARNING_TASK:
   case WARNING_FILTER:
-  case WARNING_GLIDE:
+  case WARNING_GLIDE_OR_FILTER:
     return !acktime_warning;
   case WARNING_INSIDE:
     return !acktime_inside;
