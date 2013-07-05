@@ -107,7 +107,7 @@ protected:
   void CalculateLiftPoints(LiftPoints &lift_points, fixed max_lift) const;
   fixed CalculateMaxLift() const;
   void PaintRadarPlane(Canvas &canvas) const;
-  void PaintRadarBackground(Canvas &canvas, fixed max_lift) const;
+  void PaintRadarBackground(Canvas &canvas, fixed max_lift, fixed max_lift_ceil) const;
   void PaintPoints(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintAdvisor(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintNotCircling(Canvas &canvas) const;

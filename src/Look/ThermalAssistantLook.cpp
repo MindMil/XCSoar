@@ -29,7 +29,7 @@ void
 ThermalAssistantLook::Initialise(bool small, bool inverse)
 {
   background_color = COLOR_WHITE;
-  circle_color = Color(0xB0, 0xB0, 0xB0);
+  circle_color = Color(0x90, 0x90, 0x90);
   text_color = Color(0x00, 0x00, 0x00);
   polygon_fill_color = Color(0xCC, 0xCC, 0xFF);
   polygon_border_color = Color(0x00, 0x00, 0xFF);
@@ -47,8 +47,8 @@ ThermalAssistantLook::Initialise(bool small, bool inverse)
 #else /* !OPENGL */
   polygon_pen.Set(width, polygon_border_color);
 #endif /* !OPENGL */
-  inner_circle_pen.Set(1, circle_color);
-  outer_circle_pen.Set(Pen::DASH, 1, circle_color);
+  inner_circle_pen.Set(width, circle_color);
+  outer_circle_pen.Set(Pen::DASH, small ? 1 : 2, circle_color);
   plane_pen.Set(width, inverse ? COLOR_WHITE : COLOR_BLACK);
   advisor_pen.Set(width * 4, advisor_color);
 

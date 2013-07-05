@@ -31,6 +31,7 @@
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
 #include "Look/ThermalAssistantLook.hpp"
+#include "Interface.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
@@ -76,9 +77,8 @@ ThermalAssistantRenderer::Update(const AttitudeState &attitude,
 fixed
 ThermalAssistantRenderer::CalculateMaxLift() const
 {
-  return std::max(fixed(1),
-                  *std::max_element(vario.lift_database.begin(),
-                                    vario.lift_database.end()));
+  return *std::max_element(vario.lift_database.begin(),
+                                    vario.lift_database.end());
 }
 
 void
@@ -134,14 +134,19 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 }
 
 void
-ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift) const
+ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift, fixed max_lift_ceil) const
 {
   canvas.SelectHollowBrush();
 
   canvas.Select(look.inner_circle_pen);
   canvas.DrawCircle(mid.x, mid.y, radius / 2);
   canvas.Select(look.outer_circle_pen);
-  canvas.DrawCircle(mid.x, mid.y, radius);
+
+  fixed mc = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetMC();
+  unsigned mc_radius = (radius / 2) + unsigned( mc / max_lift_ceil * fixed (radius / 2 ));
+
+  if (circling.circling && mc_radius < radius)
+    canvas.DrawCircle(mid.x, mid.y, mc_radius);
 
   if (small)
     return;
@@ -152,18 +157,35 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift) c
   canvas.SetBackgroundOpaque();
 
   TCHAR lift_string[10];
-  FormatUserVerticalSpeed(max_lift, lift_string, ARRAY_SIZE(lift_string));
-  PixelSize s = canvas.CalcTextSize(lift_string);
-  canvas.DrawText(mid.x - s.cx / 2,
-                  mid.y + radius - s.cy * 0.75,
-                  lift_string);
 
+  // draw 0 line text
   FormatUserVerticalSpeed(fixed(0), lift_string, ARRAY_SIZE(lift_string));
-  s = canvas.CalcTextSize(lift_string);
+  PixelSize s = canvas.CalcTextSize(lift_string);
   canvas.DrawText(mid.x - s.cx / 2,
                   mid.y + radius / 2 - s.cy * 0.75,
                   lift_string);
 
+  if (circling.circling) {
+    TCHAR lift_string2[20];
+
+    //draw max lift value text
+    FormatUserVerticalSpeed(max_lift, lift_string, ARRAY_SIZE(lift_string));
+    _stprintf(lift_string2, _T("max %s"), lift_string);
+    s = canvas.CalcTextSize(lift_string2);
+    canvas.DrawText(mid.x - s.cx / 2,
+                    mid.y + radius - s.cy * 0.75,
+                    lift_string2);
+
+    // draw MC line value text
+     if (mc_radius < radius) {
+      FormatUserVerticalSpeed(mc, lift_string, ARRAY_SIZE(lift_string));
+      _stprintf(lift_string2, _T("MC %s"), lift_string);
+      s = canvas.CalcTextSize(lift_string2);
+      canvas.DrawText(mid.x - s.cx / 2,
+                      mid.y - mc_radius - s.cy * 0.5,
+                      lift_string2);
+    }
+  }
   canvas.SetBackgroundTransparent();
 }
 
@@ -221,16 +243,17 @@ ThermalAssistantRenderer::UpdateLayout(const PixelRect &rc)
 void
 ThermalAssistantRenderer::Paint(Canvas &canvas)
 {
-  fixed max_lift = ceil(CalculateMaxLift());
+  fixed max_lift = CalculateMaxLift();
+  fixed max_lift_ceil = ceil(std::max(fixed(1),max_lift));
 
-  PaintRadarBackground(canvas, max_lift);
+  PaintRadarBackground(canvas, max_lift, max_lift_ceil);
   if (!circling.circling) {
     PaintNotCircling(canvas);
     return;
   }
 
   LiftPoints lift_points;
-  CalculateLiftPoints(lift_points, max_lift);
+  CalculateLiftPoints(lift_points, max_lift_ceil);
   PaintPoints(canvas, lift_points);
   PaintAdvisor(canvas, lift_points);
 
