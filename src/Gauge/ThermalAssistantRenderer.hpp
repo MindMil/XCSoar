@@ -34,13 +34,21 @@ struct ThermalAssistantLook;
 struct AttitudeState;
 struct DerivedInfo;
 
+struct FixedPoint {
+  fixed x, y;
+  FixedPoint() = default;
+  constexpr FixedPoint(fixed _x, fixed _y)
+    :x(_x), y(_y) {}
+};
+
 class ThermalAssistantRenderer
 {
+
   class LiftPoints: public std::array<RasterPoint,
                                       std::tuple_size<LiftDatabase>::value>
   {
   public:
-    RasterPoint GetAverage() const;
+    FixedPoint GetAverage() const;
   };
 
 protected:

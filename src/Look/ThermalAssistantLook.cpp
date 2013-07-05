@@ -33,6 +33,7 @@ ThermalAssistantLook::Initialise(bool small, bool inverse)
   text_color = Color(0x00, 0x00, 0x00);
   polygon_fill_color = Color(0xCC, 0xCC, 0xFF);
   polygon_border_color = Color(0x00, 0x00, 0xFF);
+  advisor_color = Color(0x00, 0x00, 0xFF);
 
 #ifdef ENABLE_OPENGL
   polygon_brush.Set(polygon_fill_color.WithAlpha(128));
@@ -49,6 +50,7 @@ ThermalAssistantLook::Initialise(bool small, bool inverse)
   inner_circle_pen.Set(1, circle_color);
   outer_circle_pen.Set(Pen::DASH, 1, circle_color);
   plane_pen.Set(width, inverse ? COLOR_WHITE : COLOR_BLACK);
+  advisor_pen.Set(width * 4, advisor_color);
 
   overlay_font.Load(GetStandardFontFace(), Layout::FastScale(24));
   circle_label_font.Load(GetStandardFontFace(), Layout::FastScale(12));

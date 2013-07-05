@@ -35,12 +35,14 @@ struct ThermalAssistantLook {
   Color text_color;
   Color polygon_fill_color;
   Color polygon_border_color;
+  Color advisor_color;
 
   Brush polygon_brush;
 
   Pen plane_pen, polygon_pen;
   Pen inner_circle_pen;
   Pen outer_circle_pen;
+  Pen advisor_pen;
 
   Font circle_label_font, overlay_font;
 

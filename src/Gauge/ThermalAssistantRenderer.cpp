@@ -36,14 +36,19 @@
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
-RasterPoint
-ThermalAssistantRenderer::LiftPoints::GetAverage() const
+static constexpr fixed VISIBILITY_SCALE(5); // arbitrary multiplier for off-center value to make it better visible
+
+
+/**
+ * Returns the relative location of thermal center from polar lift distribution
+ */
+FixedPoint ThermalAssistantRenderer::LiftPoints::GetAverage() const
 {
-  RasterPoint avg = { 0, 0 };
+  FixedPoint avg = { fixed(0), fixed(0) };
 
   for (auto it = begin(), it_end = end(); it != it_end; ++it) {
-    avg.x += it->x;
-    avg.y += it->y;
+    avg.x += fixed (it->x);
+    avg.y += fixed (it->y);
   }
 
   avg.x /= size();
@@ -181,7 +186,16 @@ void
 ThermalAssistantRenderer::PaintAdvisor(Canvas &canvas,
                                      const LiftPoints &lift_points) const
 {
-  canvas.DrawLine(mid, lift_points.GetAverage());
+  FixedPoint avg = lift_points.GetAverage( );
+  // scale the advisor point to make it bigger for better visibility
+  avg.x = ((avg.x - fixed(mid.x)) * VISIBILITY_SCALE) + fixed(mid.x);
+  avg.y = ((avg.y - fixed(mid.y)) * VISIBILITY_SCALE) + fixed(mid.y);
+
+  // draw advisor arm and point
+  RasterPoint rp((int) avg.x, (int) avg.y);
+  canvas.Select(look.advisor_pen);
+  canvas.DrawLine(mid, rp);
+  canvas.DrawCircle (rp.x, rp.y, small?4:8);
 }
 
 void
