@@ -39,7 +39,9 @@ struct ThermalAssistantLook {
 
   Brush polygon_brush;
 
-  Pen plane_pen, polygon_pen;
+  Pen plane_pen;
+  Pen polygon_pen;
+  Pen thick_polygon_pen;
   Pen inner_circle_pen;
   Pen outer_circle_pen;
   Pen advisor_pen;

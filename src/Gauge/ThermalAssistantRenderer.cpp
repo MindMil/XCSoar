@@ -32,6 +32,7 @@
 #include "Language/Language.hpp"
 #include "Look/ThermalAssistantLook.hpp"
 #include "Interface.hpp"
+#include "Computer/LiftDatabaseComputer.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
@@ -78,31 +79,87 @@ fixed
 ThermalAssistantRenderer::CalculateMaxLift() const
 {
   return (*std::max_element(vario.lift_database.begin(),
-                            vario.lift_database.end())).lift;
+                                    vario.lift_database.end())).lift;
 }
 
-void
+
+/**
+ * Calculates graphical points coordinates from given lift database
+ *
+ * @return  Returns number of valid registered lift points
+ */
+unsigned
 ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
                                             fixed max_lift) const
 {
   Angle angle = -direction;
+  Angle heading = direction;
   constexpr Angle delta = Angle::FullCircle() / unsigned(std::tuple_size<LiftDatabase>());
 
-  for (unsigned i = 0; i < lift_points.size(); i++, angle += delta) {
+  // determine the lift database index from current heading
+  unsigned index = LiftDatabaseComputer::HeadingToIndex(heading);
+
+  // Find first and last valid point of glider's trail in lift database
+  int first_valid_point_index = -1;
+  int last_valid_point_index = -1;
+  unsigned k, count;
+  int i;
+  int step;
+  if (circling.TurningLeft())
+    step = 1;
+  else
+    step = -1;
+  bool trail_found = false;
+  for (i = index, k = 0, count = 0 ;
+      k < lift_points.size() && !trail_found;
+      k ++, i += step){
+    // cycle the index around within lift database boundaries
+    if (i < 0)
+      i += int(std::tuple_size<LiftDatabase>());
+    if (i > int(std::tuple_size<LiftDatabase>() - 1))
+      i -= int(std::tuple_size<LiftDatabase>());
+
+    if (vario.lift_database[i].is_valid &&
+        vario.lift_database[i].turning_left == circling.TurningLeft()) {
+      if (first_valid_point_index < 0)
+        first_valid_point_index = i;
+      last_valid_point_index = i;
+      count ++;
+    } else {
+      if (first_valid_point_index >= 0)
+        trail_found = true;
+    }
+  }
+
+  if (first_valid_point_index < 0)
+    return 0; // No valid points found in lift database
+
+  if (!circling.TurningLeft()) {
+    int t = first_valid_point_index;
+    first_valid_point_index = last_valid_point_index;
+    last_valid_point_index = t;
+  }
+
+  for (unsigned i = 0;  i < lift_points.size() ; i++, angle += delta) {
     auto sincos = angle.SinCos();
     auto scale = NormalizeLift(vario.lift_database[i].lift, max_lift) * fixed(radius);
 
-    lift_points[i].x = (int)(sincos.second * scale);
-    lift_points[i].y = (int)(sincos.first * scale);
+    int j = int (i) - first_valid_point_index;
+    if (j < 0) j += lift_points.size();
+
+    lift_points[j].x = (int)(sincos.second * scale);
+    lift_points[j].y = (int)(sincos.first * scale);
 
     if (!circling.TurningLeft()) {
-      lift_points[i].x *= -1;
-      lift_points[i].y *= -1;
+      lift_points[j].x *= -1;
+      lift_points[j].y *= -1;
     }
 
-    lift_points[i].x += mid.x;
-    lift_points[i].y += mid.y;
+    lift_points[j].x += mid.x;
+    lift_points[j].y += mid.y;
   }
+
+  return count;
 }
 
 fixed
@@ -191,7 +248,8 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift, f
 
 void
 ThermalAssistantRenderer::PaintPoints(Canvas &canvas,
-                                    const LiftPoints &lift_points) const
+                                    const LiftPoints &lift_points,
+                                    unsigned points_count) const
 {
 #ifdef ENABLE_OPENGL
   GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -199,9 +257,16 @@ ThermalAssistantRenderer::PaintPoints(Canvas &canvas,
   canvas.SetMixMask();
 #endif /* GDI */
 
-  canvas.Select(look.polygon_brush);
-  canvas.Select(look.polygon_pen);
-  canvas.DrawPolygon(lift_points.data(), lift_points.size());
+  if (points_count == lift_points.size()) {
+    canvas.Select(look.polygon_brush);
+    canvas.Select(look.polygon_pen);
+    canvas.DrawPolygon(lift_points.data(), lift_points.size());
+  } else {
+    if (points_count > 0) {
+      canvas.Select(look.thick_polygon_pen);
+      canvas.DrawPolyline(lift_points.data(), points_count);
+    }
+  }
 }
 
 void
@@ -253,9 +318,9 @@ ThermalAssistantRenderer::Paint(Canvas &canvas)
   }
 
   LiftPoints lift_points;
-  CalculateLiftPoints(lift_points, max_lift_ceil);
-  PaintPoints(canvas, lift_points);
-  PaintAdvisor(canvas, lift_points);
-
+  unsigned points_count = CalculateLiftPoints(lift_points, max_lift_ceil);
+  PaintPoints(canvas, lift_points, points_count);
+  if (points_count == lift_points.size())
+    PaintAdvisor(canvas, lift_points); // paint advisor only on full circle
   PaintRadarPlane(canvas);
 }

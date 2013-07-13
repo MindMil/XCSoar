@@ -44,8 +44,11 @@ ThermalAssistantLook::Initialise(bool small, bool inverse)
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);
 #ifdef ENABLE_OPENGL
   polygon_pen.Set(width, polygon_border_color.WithAlpha(128));
+  thick_polygon_pen.Set(width*2, polygon_border_color.WithAlpha(128));
 #else /* !OPENGL */
   polygon_pen.Set(width, polygon_border_color);
+  thick_polygon_pen.Set(width*2, polygon_border_color);
+
 #endif /* !OPENGL */
   inner_circle_pen.Set(width, circle_color);
   outer_circle_pen.Set(Pen::DASH, small ? 1 : 2, circle_color);
