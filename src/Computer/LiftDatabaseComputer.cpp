@@ -47,6 +47,7 @@ LiftDatabaseComputer::Reset(LiftDatabase &lift_database,
   Clear(lift_database, circling_average_trace);
 }
 
+
 unsigned
 LiftDatabaseComputer::HeadingToIndex (Angle &heading)
 {
@@ -71,6 +72,13 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
 
   // Determine the direction in which we are circling
   bool left = circling_info.TurningLeft();
+
+  // Check if the direction of turning has changed since last cycle.
+  // Clear database if it did since the previous lift values are no longer
+  // valid if glider changed circling direction as it will be now flying
+  // through different regions of thermal.
+  if (left != last_turning_left)
+    lift_database.Clear();
 
   // Depending on the direction set the step size sign for the
   // following loop
@@ -106,13 +114,19 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
        heading > Angle::Degrees(270))) {
 
     fixed h_av = fixed(0);
-    for (auto i : lift_database)
-      h_av += i.lift;
+    int count = 0;
+    for (auto i : lift_database){
+      if (i.is_valid) {
+        h_av += i.lift;
+        count ++;
+      }
+    }
 
-    h_av /= lift_database.size();
+    h_av /= count;
     circling_average_trace.push(h_av);
   }
 
   last_circling = circling_info.circling;
+  last_turning_left = left;
   last_heading = basic.attitude.heading;
 }
