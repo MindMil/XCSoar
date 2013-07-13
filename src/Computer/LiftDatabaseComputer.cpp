@@ -47,22 +47,8 @@ LiftDatabaseComputer::Reset(LiftDatabase &lift_database,
   Clear(lift_database, circling_average_trace);
 }
 
-/**
- * This function converts a heading into an unsigned index for the LiftDatabase.
- *
- * This is calculated with Angles to deal with the 360 degree limit.
- *
- * 357 = 0
- * 4 = 0
- * 5 = 1
- * 14 = 1
- * 15 = 2
- * ...
- * @param heading The heading to convert
- * @return The index for the LiftDatabase array
- */
-static unsigned
-heading_to_index(Angle &heading)
+unsigned
+LiftDatabaseComputer::HeadingToIndex (Angle &heading)
 {
   static constexpr Angle afive = Angle::Degrees(5);
 
@@ -107,19 +93,21 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
   for (Angle h = last_heading;
        left == negative((heading - h).AsDelta().Degrees());
        h += heading_step) {
-    unsigned index = heading_to_index(h);
-    lift_database[index] = basic.brutto_vario;
+    unsigned index = HeadingToIndex(h);
+    lift_database[index].lift = basic.brutto_vario;
+    lift_database[index].is_valid = true;
+    lift_database[index].turning_left = left;
   }
 
   // detect zero crossing
   if ((heading < Angle::QuarterCircle() &&
-       last_heading.Degrees() > fixed(270)) ||
+       last_heading > Angle::Degrees(270)) ||
       (last_heading < Angle::QuarterCircle() &&
-       heading.Degrees() > fixed(270))) {
+       heading > Angle::Degrees(270))) {
 
     fixed h_av = fixed(0);
     for (auto i : lift_database)
-      h_av += i;
+      h_av += i.lift;
 
     h_av /= lift_database.size();
     circling_average_trace.push(h_av);

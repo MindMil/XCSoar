@@ -77,8 +77,8 @@ ThermalAssistantRenderer::Update(const AttitudeState &attitude,
 fixed
 ThermalAssistantRenderer::CalculateMaxLift() const
 {
-  return *std::max_element(vario.lift_database.begin(),
-                                    vario.lift_database.end());
+  return (*std::max_element(vario.lift_database.begin(),
+                            vario.lift_database.end())).lift;
 }
 
 void
@@ -90,7 +90,7 @@ ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
 
   for (unsigned i = 0; i < lift_points.size(); i++, angle += delta) {
     auto sincos = angle.SinCos();
-    auto scale = NormalizeLift(vario.lift_database[i], max_lift) * fixed(radius);
+    auto scale = NormalizeLift(vario.lift_database[i].lift, max_lift) * fixed(radius);
 
     lift_points[i].x = (int)(sincos.second * scale);
     lift_points[i].y = (int)(sincos.first * scale);

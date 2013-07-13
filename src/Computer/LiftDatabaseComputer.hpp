@@ -50,6 +50,23 @@ class LiftDatabaseComputer {
              TraceVariableHistory &circling_average_trace);
 
 public:
+
+  /**
+   * This function converts a heading into an unsigned index for the LiftDatabase.
+   *
+   * This is calculated with Angles to deal with the 360 degree limit.
+   *
+   * 357 = 0
+   * 4 = 0
+   * 5 = 1
+   * 14 = 1
+   * 15 = 2
+   * ...
+   * @param heading The heading to convert
+   * @return The index for the LiftDatabase array
+   */
+  static unsigned HeadingToIndex (Angle &heading);
+
   /**
    * Reset this computer and clear the attributes.
    */

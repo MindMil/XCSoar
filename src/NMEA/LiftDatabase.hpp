@@ -29,10 +29,45 @@ Copyright_License {
 #include <type_traits>
 #include <array>
 
-class LiftDatabase : public std::array<fixed, 36> {
+/**
+ * Identifies one lift point in lift database along with
+ * associated validity flag and turning direction
+ */
+struct LiftPoint {
+  /**
+   * Registered lift in this direction
+   */
+  fixed lift;
+
+  /**
+   * Lift value is valid
+   */
+  bool is_valid;
+
+  /**
+   * Is lift recorded when turning left
+   */
+  bool turning_left;
+
+  constexpr bool
+  operator<(const LiftPoint x) const
+  {
+    return lift < x.lift;
+  }
+
+  constexpr bool
+  operator>(const LiftPoint x) const
+  {
+    return lift > x.lift;
+  }
+
+};
+
+class LiftDatabase : public std::array<LiftPoint, 36> {
 public:
   void Clear() {
-    fill(fixed(0));
+    LiftPoint lp = {}; // sets all values to 0
+    fill(lp);
   }
 };
 

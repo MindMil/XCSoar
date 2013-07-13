@@ -163,12 +163,12 @@ void ProcessThermalNotifier (LiftDatabase &lift_database,
     fixed x = fixed(0), y = fixed(0);
 
     fixed max_lift = std::max(MAX_BOTTOM_MARGIN,
-                              *std::max_element(lift_database.begin(),
-                                                lift_database.end()));
+                              (*std::max_element(lift_database.begin(),
+                                                lift_database.end())).lift);
 
     for (unsigned i = 0; i < num_points; i++, angle += delta) {
       auto sincos = angle.SinCos();
-      auto lift = std::max(fixed(0),lift_database[i]);
+      auto lift = std::max(fixed(0),lift_database[i].lift);
       if (circling.TurningLeft()) {
         x -= sincos.first * lift;
         y -= sincos.second * lift;
